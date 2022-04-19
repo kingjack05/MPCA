@@ -1,5 +1,6 @@
-import { tabsAnatomy as parts } from "@chakra-ui/anatomy"
 import { getColor, mode } from "@chakra-ui/theme-tools"
+
+import { tabsAnatomy as parts } from "@chakra-ui/anatomy"
 
 const baseStyleRoot = (props) => {
 	const { orientation } = props
@@ -210,10 +211,12 @@ const defaultProps = {
 	colorScheme: "blue",
 }
 
-export default {
+const Tabs = {
 	parts: parts.keys,
 	baseStyle,
 	sizes,
 	variants,
 	defaultProps,
 }
+
+export default Tabs

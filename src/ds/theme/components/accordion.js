@@ -40,7 +40,9 @@ const baseStyle = {
 	icon: baseStyleIcon,
 }
 
-export default {
+const Accordion = {
 	parts: parts.keys,
 	baseStyle,
 }
+
+export default Accordion

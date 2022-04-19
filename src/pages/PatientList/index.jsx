@@ -110,7 +110,9 @@ function PatientBox({ _id, name, problem, summary, onEdit, onDelete }) {
 				<StatusIndicator status={status} />
 				<Flex direction="column">
 					{problem ? (
-						<Box textStyle="h3">{problem.problem}</Box>
+						<Box textStyle="h3" textAlign="left">
+							{problem.problem}
+						</Box>
 					) : (
 						<Box
 							textStyle="bodyShort1"

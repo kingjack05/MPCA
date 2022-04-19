@@ -1,5 +1,5 @@
-import { drawerAnatomy as parts } from "@chakra-ui/anatomy"
 import { mode } from "@chakra-ui/theme-tools"
+import { drawerAnatomy as parts } from "@chakra-ui/anatomy"
 
 /**
  * Since the `maxWidth` prop references theme.sizes internally,
@@ -90,9 +90,11 @@ const defaultProps = {
 	size: "xs",
 }
 
-export default {
+const Drawer = {
 	parts: parts.keys,
 	baseStyle,
 	sizes,
 	defaultProps,
 }
+
+export default Drawer

@@ -1,5 +1,6 @@
-import { inputAnatomy as parts } from "@chakra-ui/anatomy"
 import { getColor, mode } from "@chakra-ui/theme-tools"
+
+import { inputAnatomy as parts } from "@chakra-ui/anatomy"
 
 const baseStyle = {
 	field: {
@@ -203,10 +204,12 @@ const defaultProps = {
 	variant: "outline",
 }
 
-export default {
+const Input = {
 	parts: parts.keys,
 	baseStyle,
 	sizes,
 	variants,
 	defaultProps,
 }
+
+export default Input

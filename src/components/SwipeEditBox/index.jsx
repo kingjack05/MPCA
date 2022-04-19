@@ -1,16 +1,24 @@
 import { Edit, TrashCan } from "@carbon/icons-react"
+
 import { Box } from "@chakra-ui/react"
 import React from "react"
 import { useSwipeEdit } from "./useSwipeEdit"
 
-function SwipeEditBox({ children, onEdit, onDelete, w }) {
+function SwipeEditBox({ children, onEdit, onDelete, borderRadius = "base", w }) {
 	const { deltaX, bg, handlers } = useSwipeEdit({
 		onEdit,
 		onDelete,
 	})
 
 	return (
-		<Box position="relative" bg={bg} overflowX="visible" zIndex="0" borderRadius="base" w={w}>
+		<Box
+			position="relative"
+			bg={bg}
+			overflowX="visible"
+			zIndex="0"
+			borderRadius={borderRadius}
+			w={w}
+		>
 			<Box
 				{...handlers}
 				transform={`translateX(${deltaX}px)`}

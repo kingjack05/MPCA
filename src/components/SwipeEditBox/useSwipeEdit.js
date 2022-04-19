@@ -18,9 +18,9 @@ export const useSwipeEdit = ({ onEdit, onDelete }) => {
 			}
 		},
 		onSwiped: () => {
-			if (actionState == "edit") {
+			if (actionState === "edit") {
 				onEdit()
-			} else if (actionState == "delete") {
+			} else if (actionState === "delete") {
 				onDelete()
 			}
 			setdeltaX(0)

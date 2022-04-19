@@ -1,5 +1,5 @@
-import { modalAnatomy as parts } from "@chakra-ui/anatomy"
 import { mode } from "@chakra-ui/theme-tools"
+import { modalAnatomy as parts } from "@chakra-ui/anatomy"
 
 const baseStyleOverlay = {
 	bg: "blackAlpha.600",
@@ -110,9 +110,11 @@ const defaultProps = {
 	size: "md",
 }
 
-export default {
+const Modal = {
 	parts: parts.keys,
 	baseStyle,
 	sizes,
 	defaultProps,
 }
+
+export default Modal

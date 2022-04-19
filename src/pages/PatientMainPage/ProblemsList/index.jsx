@@ -1,22 +1,23 @@
-import StatusIndicator from "../../../components/StatusIndicator"
-
 import {
 	Accordion,
-	AccordionItem,
 	AccordionButton,
-	AccordionPanel,
 	AccordionIcon,
+	AccordionItem,
+	AccordionPanel,
 	Box,
 	Flex,
 	VStack,
 	useDisclosure,
 } from "@chakra-ui/react"
-import { useState } from "react"
-import SwipeEditBox from "../../../components/SwipeEditBox"
-import { CreateProblemModal, DeleteProblemModal, UpdateProblemModal } from "./modals"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
-import { useLongPress } from "use-long-press"
+import { CreateProblemModal, DeleteProblemModal, UpdateProblemModal } from "./modals"
+
+import { EditInfoDrawer } from "./Drawers/EditInfoDrawer"
 import { MedicationInfo } from "./infoItems"
+import StatusIndicator from "../../../components/StatusIndicator"
+import SwipeEditBox from "../../../components/SwipeEditBox"
+import { useLongPress } from "use-long-press"
+import { useState } from "react"
 
 function ProblemsList({ patient }) {
 	const [problemIndex, setProblemIndex] = useState(0)
@@ -46,6 +47,11 @@ function ProblemsList({ patient }) {
 		onOpen: onOpenAddInfoDrawer,
 		onClose: onCloseAddInfoDrawer,
 	} = useDisclosure()
+	const {
+		isOpen: isOpenEditInfoDrawer,
+		onOpen: onOpenEditInfoDrawer,
+		onClose: onCloseEditInfoDrawer,
+	} = useDisclosure()
 	return (
 		<Box>
 			<Box textStyle="body2" my="1">
@@ -71,6 +77,7 @@ function ProblemsList({ patient }) {
 							onOpenProblemDrawer()
 						}}
 						onOpenAddInfoDrawer={onOpenAddInfoDrawer}
+						onOpenEditInfoDrawer={onOpenEditInfoDrawer}
 					/>
 				))}
 				<AddProblem onClick={onOpenCreateProblemModal} />
@@ -107,15 +114,36 @@ function ProblemsList({ patient }) {
 				patient={patient}
 				problemIndex={problemIndex}
 			/>
+			<EditInfoDrawer
+				isOpen={isOpenEditInfoDrawer}
+				onClose={onCloseEditInfoDrawer}
+				patient={patient}
+				problemIndex={problemIndex}
+			/>
 		</Box>
 	)
 }
 
-function Problem({ patient, problem, index, onEdit, onDelete, onLongPress, onOpenAddInfoDrawer }) {
+function Problem({
+	patient,
+	problem,
+	index,
+	onEdit,
+	onDelete,
+	onLongPress,
+	onOpenAddInfoDrawer,
+	onOpenEditInfoDrawer,
+}) {
 	const bind = useLongPress(onLongPress)
 	const InfoToComnponent = ({ category, content }, index) => {
 		const typeToComponent = {
-			Meds: <MedicationInfo {...content} key={index} />,
+			Meds: (
+				<MedicationInfo
+					{...content}
+					key={index}
+					onOpenEditInfoDrawer={onOpenEditInfoDrawer}
+				/>
+			),
 		}
 		return typeToComponent[category]
 	}
@@ -185,7 +213,8 @@ function AddInfo({ onClick }) {
 			bg="transparent"
 			h="5"
 			border="dashed"
-			borderRadius="base"
+			borderRadius="none"
+			mb="1"
 			w="100%"
 			color="text02"
 			fontStyle="italic"

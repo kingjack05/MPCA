@@ -1,26 +1,29 @@
-import { getDB } from "../../db"
+import { useEffect, useRef, useState } from "react"
+import { usePagination, useTable } from "react-table"
 
-import { useEffect, useState, useRef } from "react"
-import { useTable, usePagination } from "react-table"
+import { getDB } from "../../db"
 import { v4 as uuid } from "uuid"
 
 function CRUDTable({ schema }) {
 	const [data, setData] = useState([])
 	const dbref = useRef()
 
-	useEffect(async () => {
-		dbref.current = await getDB()
-		const dataQuery = dbref.current[schema.title].find()
-		const dataInit = await dataQuery.exec()
-		setData(dataInit)
-		const sub = dataQuery.$.subscribe((data) => {
-			if (!data) {
-				return
-			}
-			setData(data)
-		})
-		return () => sub.unsubscribe()
-	}, [])
+	useEffect(() => {
+		const fetchData = async () => {
+			dbref.current = await getDB()
+			const dataQuery = dbref.current[schema.title].find()
+			const dataInit = await dataQuery.exec()
+			setData(dataInit)
+			const sub = dataQuery.$.subscribe((data) => {
+				if (!data) {
+					return
+				}
+				setData(data)
+			})
+			return () => sub.unsubscribe()
+		}
+		fetchData()
+	}, [schema.title])
 
 	const addData = async (data) => {
 		data = { ...data, _id: uuid() }
@@ -31,7 +34,7 @@ function CRUDTable({ schema }) {
 		<div>
 			<Table
 				columns={Object.keys(schema.properties)
-					.filter((property) => property != "_id")
+					.filter((property) => property !== "_id")
 					.map((property) => {
 						var columnObj = { Header: property, accessor: property }
 						return columnObj
