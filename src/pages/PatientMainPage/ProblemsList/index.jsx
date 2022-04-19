@@ -1,3 +1,10 @@
+import { ProblemContext } from "../../../components/Context Providers/ProblemContext"
+import StatusIndicator from "../../../components/StatusIndicator"
+import SwipeEditBox from "../../../components/SwipeEditBox"
+import { AddInfoDrawer, ProblemDrawer } from "./drawers"
+import { MedicationInfo } from "./infoItems"
+import { CreateProblemModal, DeleteProblemModal, UpdateProblemModal } from "./modals"
+
 import {
 	Accordion,
 	AccordionButton,
@@ -9,15 +16,9 @@ import {
 	VStack,
 	useDisclosure,
 } from "@chakra-ui/react"
-import { AddInfoDrawer, ProblemDrawer } from "./drawers"
-import { CreateProblemModal, DeleteProblemModal, UpdateProblemModal } from "./modals"
-
-import { EditInfoDrawer } from "./Drawers/EditInfoDrawer"
-import { MedicationInfo } from "./infoItems"
-import StatusIndicator from "../../../components/StatusIndicator"
-import SwipeEditBox from "../../../components/SwipeEditBox"
+import { useCallback, useState } from "react"
 import { useLongPress } from "use-long-press"
-import { useState } from "react"
+import { usePatientContext } from "../../../components/Context Providers/PatientContext"
 
 function ProblemsList({ patient }) {
 	const [problemIndex, setProblemIndex] = useState(0)
@@ -47,23 +48,17 @@ function ProblemsList({ patient }) {
 		onOpen: onOpenAddInfoDrawer,
 		onClose: onCloseAddInfoDrawer,
 	} = useDisclosure()
-	const {
-		isOpen: isOpenEditInfoDrawer,
-		onOpen: onOpenEditInfoDrawer,
-		onClose: onCloseEditInfoDrawer,
-	} = useDisclosure()
 	return (
 		<Box>
 			<Box textStyle="body2" my="1">
 				Active Problems
 			</Box>
 			<VStack>
-				{patient?.problems.map((problem, index) => (
+				{patient?.problems?.map((problem, index) => (
 					<Problem
-						patient={patient}
 						problem={problem}
 						key={index}
-						index={index}
+						problemIndex={index}
 						onEdit={() => {
 							setProblemIndex(index)
 							onOpenUpdateProblemModal()
@@ -77,7 +72,6 @@ function ProblemsList({ patient }) {
 							onOpenProblemDrawer()
 						}}
 						onOpenAddInfoDrawer={onOpenAddInfoDrawer}
-						onOpenEditInfoDrawer={onOpenEditInfoDrawer}
 					/>
 				))}
 				<AddProblem onClick={onOpenCreateProblemModal} />
@@ -114,78 +108,65 @@ function ProblemsList({ patient }) {
 				patient={patient}
 				problemIndex={problemIndex}
 			/>
-			<EditInfoDrawer
-				isOpen={isOpenEditInfoDrawer}
-				onClose={onCloseEditInfoDrawer}
-				patient={patient}
-				problemIndex={problemIndex}
-			/>
 		</Box>
 	)
 }
 
-function Problem({
-	patient,
-	problem,
-	index,
-	onEdit,
-	onDelete,
-	onLongPress,
-	onOpenAddInfoDrawer,
-	onOpenEditInfoDrawer,
-}) {
+function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDrawer }) {
 	const bind = useLongPress(onLongPress)
-	const InfoToComnponent = ({ category, content }, index) => {
+	const { patient } = usePatientContext()
+	const problem = patient?.problems[problemIndex]
+	const [, updateState] = useState()
+	const forceUpdate = useCallback(() => {
+		updateState({})
+	}, [])
+
+	const InfoToComnponent = ({ category }, index) => {
 		const typeToComponent = {
-			Meds: (
-				<MedicationInfo
-					{...content}
-					key={index}
-					onOpenEditInfoDrawer={onOpenEditInfoDrawer}
-				/>
-			),
+			Meds: <MedicationInfo key={index} infoIndex={index} forceUpdate={forceUpdate} />,
 		}
 		return typeToComponent[category]
 	}
 
 	return (
-		<SwipeEditBox w="100%" onEdit={onEdit} onDelete={onDelete}>
-			<Accordion defaultIndex={[0]} allowMultiple>
-				<AccordionItem>
-					<h2>
-						<AccordionButton
-							{...bind}
-							bg="white"
-							borderRadius="0.5"
-							py="1"
-							_expanded={{ borderBottomRadius: "none" }}
-						>
-							<Box flex="1" textAlign="left">
-								<Flex align="center">
-									<StatusIndicator status={problem.status} />
-									<Flex direction="column">
-										<Box textStyle="h2">{problem.problem}</Box>
-										<Box textStyle="label1" color="gray.700">
-											Last log
-										</Box>
+		<ProblemContext problemIndex={problemIndex}>
+			<SwipeEditBox onEdit={onEdit} onDelete={onDelete} w="100%">
+				<Accordion defaultIndex={[0]} allowMultiple>
+					<AccordionItem>
+						<h2>
+							<AccordionButton
+								{...bind}
+								bg="white"
+								borderRadius="0.5"
+								py="1"
+								_expanded={{ borderBottomRadius: "none" }}
+							>
+								<Box flex="1" textAlign="left">
+									<Flex align="center">
+										<StatusIndicator status={problem.status} />
+										<Flex direction="column">
+											<Box textStyle="h2">{problem.problem}</Box>
+											<Box textStyle="label1" color="gray.700">
+												Last log
+											</Box>
+										</Flex>
 									</Flex>
-								</Flex>
-							</Box>
-							<AccordionIcon />
-						</AccordionButton>
-					</h2>
-					<AccordionPanel bg="gray.100" pl="3" borderBottomRadius="0.5">
-						<AddInfo
-							onClick={() => {
-								onOpenAddInfoDrawer()
-								console.log(patient)
-							}}
-						/>
-						{problem.info.map(InfoToComnponent)}
-					</AccordionPanel>
-				</AccordionItem>
-			</Accordion>
-		</SwipeEditBox>
+								</Box>
+								<AccordionIcon />
+							</AccordionButton>
+						</h2>
+						<AccordionPanel bg="gray.100" pl="3" borderBottomRadius="0.5">
+							<AddInfo
+								onClick={() => {
+									onOpenAddInfoDrawer()
+								}}
+							/>
+							{problem.info.map(InfoToComnponent)}
+						</AccordionPanel>
+					</AccordionItem>
+				</Accordion>
+			</SwipeEditBox>
+		</ProblemContext>
 	)
 }
 

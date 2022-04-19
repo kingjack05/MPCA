@@ -81,6 +81,12 @@ const variantPrimary = {
 	border: "none",
 }
 
+const variantDanger = {
+	bg: "specialDanger",
+	color: "white",
+	border: "none",
+}
+
 const variantSolid = (props) => {
 	const { colorScheme: c } = props
 
@@ -153,6 +159,7 @@ const variants = {
 	link: variantLink,
 	unstyled: variantUnstyled,
 	primary: variantPrimary,
+	danger: variantDanger,
 }
 
 const sizes = {

@@ -104,9 +104,7 @@ export const DeleteProblemModal = ({ isOpen, onClose, patient, problemIndex }) =
 				<ModalHeader>Delete Patient</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
-					<Text>
-						Are you sure you want to delete {patient?.problems[problemIndex]?.problem}?
-					</Text>
+					<Text>Are you sure?</Text>
 					<Button
 						onClick={async () => {
 							await patient.atomicUpdate((oldData) => {

@@ -173,8 +173,8 @@ const AddMed = ({ onClose, patient, problemIndex }) => {
 				<form id="addMed" onSubmit={handleSubmit(onSubmit)}>
 					<Input {...register("name")} placeholder="Name" />
 					<Input {...register("strength")} placeholder="Strength" />
-					<Input {...register("dosage")} placeholder="Dosage" />
 					<Input {...register("form")} placeholder="Form" />
+					<Input {...register("usage")} placeholder="Usage" />
 				</form>
 			</Box>
 			<Flex>

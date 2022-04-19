@@ -109,7 +109,7 @@ export const medsSchema = {
 		_id: { type: "string" },
 		name: { type: "string" },
 		strength: { type: "string" },
-		dosage: { type: "string" },
+		usage: { type: "string" },
 		form: { type: "string" },
 	},
 }

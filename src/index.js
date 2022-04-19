@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import App from "./App"
 import { ChakraProvider } from "@chakra-ui/react"
+import { DrawerContext } from "./components/DrawerContext"
 import PatientMainPage from "./pages/PatientMainPage"
 import React from "react"
 import Test from "./pages/Test"
@@ -17,13 +18,15 @@ const root = createRoot(container)
 root.render(
 	<React.StrictMode>
 		<ChakraProvider theme={theme} resetCSS={false}>
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<App />} />
-					<Route path="/patient/:_id" element={<PatientMainPage />} />
-					<Route path="/test" element={<Test />} />
-				</Routes>
-			</BrowserRouter>
+			<DrawerContext>
+				<BrowserRouter>
+					<Routes>
+						<Route path="/" element={<App />} />
+						<Route path="/patient/:_id" element={<PatientMainPage />} />
+						<Route path="/test" element={<Test />} />
+					</Routes>
+				</BrowserRouter>
+			</DrawerContext>
 		</ChakraProvider>
 	</React.StrictMode>
 )

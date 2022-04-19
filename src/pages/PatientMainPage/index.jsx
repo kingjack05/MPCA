@@ -1,39 +1,43 @@
-import ProblemsList from "./ProblemsList"
+import { Box, Flex, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react"
 
-import { Box, Flex, Tabs, TabList, TabPanels, Tab, TabPanel, Text } from "@chakra-ui/react"
+import { ArrowLeft } from "@carbon/icons-react"
+import { PatientContext } from "../../components/Context Providers/PatientContext"
+import ProblemsList from "./ProblemsList"
 import { useParams } from "react-router-dom"
 import { usePatient } from "../../queries/usePatient"
-import { ArrowLeft } from "@carbon/icons-react"
 
 function PatientMainPage() {
 	const params = useParams()
 	const { patient } = usePatient({ id: params._id })
+
 	return (
 		<>
-			<Header patient={patient} />
-			<Tabs variant="line">
-				<TabList>
-					<Tab>Problems</Tab>
-					<Tab>Logs</Tab>
-					<Tab>Meds</Tab>
-					<Tab>Labs</Tab>
-				</TabList>
+			<PatientContext id={params._id}>
+				<Header patient={patient} />
+				<Tabs variant="line">
+					<TabList>
+						<Tab>Problems</Tab>
+						<Tab>Logs</Tab>
+						<Tab>Meds</Tab>
+						<Tab>Labs</Tab>
+					</TabList>
 
-				<TabPanels>
-					<TabPanel bg="background">
-						<ProblemsList patient={patient} />
-					</TabPanel>
-					<TabPanel>
-						<p>Logs!</p>
-					</TabPanel>
-					<TabPanel>
-						<p>Meds!</p>
-					</TabPanel>
-					<TabPanel>
-						<p>Labs!</p>
-					</TabPanel>
-				</TabPanels>
-			</Tabs>
+					<TabPanels>
+						<TabPanel bg="background">
+							<ProblemsList patient={patient} />
+						</TabPanel>
+						<TabPanel>
+							<p>Logs!</p>
+						</TabPanel>
+						<TabPanel>
+							<p>Meds!</p>
+						</TabPanel>
+						<TabPanel>
+							<p>Labs!</p>
+						</TabPanel>
+					</TabPanels>
+				</Tabs>
+			</PatientContext>
 		</>
 	)
 }
