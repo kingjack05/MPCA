@@ -1,9 +1,10 @@
+import { usePatientContext } from "../../../components/Context Providers/PatientContext"
 import { ProblemContext } from "../../../components/Context Providers/ProblemContext"
 import StatusIndicator from "../../../components/StatusIndicator"
 import SwipeEditBox from "../../../components/SwipeEditBox"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
 import { MedicationInfo } from "./infoItems"
-import { CreateProblemModal, DeleteProblemModal, UpdateProblemModal } from "./modals"
+import { DeleteProblemModal, UpdateProblemModal } from "./modals"
 
 import {
 	Accordion,
@@ -12,22 +13,26 @@ import {
 	AccordionItem,
 	AccordionPanel,
 	Box,
+	Button,
 	Flex,
+	Input,
+	Radio,
+	RadioGroup,
+	Stack,
+	Text,
 	VStack,
 	useDisclosure,
 } from "@chakra-ui/react"
-import { useCallback, useState } from "react"
+import { useCallback, useRef, useState } from "react"
+import { useForm } from "react-hook-form"
 import { useLongPress } from "use-long-press"
-import { usePatientContext } from "../../../components/Context Providers/PatientContext"
+import { useDrawer } from "../../../components/DrawerContext"
+import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
 
 function ProblemsList({ patient }) {
+	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
 	const [problemIndex, setProblemIndex] = useState(0)
 
-	const {
-		isOpen: isOpenCreateProblemModal,
-		onOpen: onOpenCreateProblemModal,
-		onClose: onCloseCreateProblemModal,
-	} = useDisclosure()
 	const {
 		isOpen: isOpenUpdateProblemModal,
 		onOpen: onOpenUpdateProblemModal,
@@ -71,19 +76,23 @@ function ProblemsList({ patient }) {
 							setProblemIndex(index)
 							onOpenProblemDrawer()
 						}}
-						onOpenAddInfoDrawer={onOpenAddInfoDrawer}
+						onOpenAddInfoDrawer={() => {
+							setProblemIndex(index)
+							onOpenAddInfoDrawer()
+						}}
 					/>
 				))}
-				<AddProblem onClick={onOpenCreateProblemModal} />
+				<CreateProblemButton
+					onClick={() => {
+						onOpenDrawer()
+						setHeader("Add Problem")
+						setComponent(<CreateProblem patient={patient} />)
+					}}
+				/>
 			</VStack>
 			<Box textStyle="body2" mt="2" mb="1">
 				Underlying Problems
 			</Box>
-			<CreateProblemModal
-				isOpen={isOpenCreateProblemModal}
-				onClose={onCloseCreateProblemModal}
-				patient={patient}
-			/>
 			<UpdateProblemModal
 				isOpen={isOpenUpdateProblemModal}
 				onClose={onCloseUpdateProblemModal}
@@ -170,7 +179,7 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 	)
 }
 
-function AddProblem({ onClick }) {
+function CreateProblemButton({ onClick }) {
 	return (
 		<Box
 			as="button"
@@ -183,6 +192,120 @@ function AddProblem({ onClick }) {
 		>
 			+ New Problem
 		</Box>
+	)
+}
+
+const CreateProblem = ({ patient }) => {
+	const { onCloseDrawer } = useDrawer()
+	const [createMode, setCreateMode] = useState("new")
+	const templateRef = useRef()
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm()
+
+	const addProblem = async (data) => {
+		await patient.atomicUpdate((oldData) => {
+			const problem = { info: [], ...data }
+			oldData.problems.push(problem)
+			return oldData
+		})
+		onCloseDrawer()
+	}
+
+	return (
+		<>
+			<RadioGroup onChange={setCreateMode} value={createMode} px="3" mb="2">
+				<Stack direction="row">
+					<Radio value="new" size="sm">
+						New
+					</Radio>
+					<Radio value="template" size="sm">
+						Load From Template
+					</Radio>
+				</Stack>
+			</RadioGroup>
+			{createMode === "new" && (
+				<>
+					<Box m="2">
+						<form
+							id="addProblem"
+							onSubmit={handleSubmit(addProblem)}
+							autoComplete="off"
+						>
+							<Input
+								{...register("problem", { required: true })}
+								placeholder="Problem"
+								variant="carbon"
+							/>
+							<Text>{errors.problem ? "Problem is required." : " "}</Text>
+						</form>
+					</Box>
+					<Flex>
+						<Button
+							type="submit"
+							form="addProblem"
+							flex="1"
+							borderRadius="none"
+							p="0"
+							variant="primary"
+						>
+							Add
+						</Button>
+						<Button
+							onClick={onCloseDrawer}
+							flex="1"
+							borderRadius="none"
+							bg="ui03"
+							border="none"
+						>
+							Cancel
+						</Button>
+					</Flex>
+				</>
+			)}
+			{createMode === "template" && (
+				<>
+					<Box m="2" mb="15">
+						<AutosuggestComboBox
+							collection="templates"
+							onSelect={(item) => {
+								const { problem, status, info } = item
+								const fromTemplate = { problem, status, info }
+								templateRef.current = fromTemplate
+							}}
+							limit={3}
+							fieldName="problem"
+						/>
+					</Box>
+					<Flex>
+						<Button
+							onClick={async () => {
+								console.log(templateRef.current)
+								await addProblem(templateRef.current)
+							}}
+							flex="1"
+							borderRadius="none"
+							p="0"
+							variant="primary"
+						>
+							Confirm
+						</Button>
+						<Button
+							onClick={onCloseDrawer}
+							flex="1"
+							borderRadius="none"
+							bg="ui03"
+							border="none"
+						>
+							Cancel
+						</Button>
+					</Flex>
+				</>
+			)}
+		</>
 	)
 }
 

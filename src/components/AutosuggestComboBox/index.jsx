@@ -4,8 +4,9 @@ import useDebounce from "../../hooks/utility/useDebounce"
 import { getDB } from "../../db"
 import { Box, Flex, Input, UnorderedList } from "@chakra-ui/react"
 
-export const AutosuggestComboBox = ({ schema, onSelect, limit }) => {
+export const AutosuggestComboBox = ({ collection, fieldName = "name", onSelect, limit }) => {
 	const [items, setItems] = useState([])
+
 	const {
 		isOpen,
 		inputValue,
@@ -15,7 +16,7 @@ export const AutosuggestComboBox = ({ schema, onSelect, limit }) => {
 		getItemProps,
 	} = useCombobox({
 		items,
-		itemToString: (item) => item?.name || "",
+		itemToString: (item) => item[fieldName] || "",
 		onSelectedItemChange({ selectedItem }) {
 			onSelect(selectedItem)
 		},
@@ -26,9 +27,11 @@ export const AutosuggestComboBox = ({ schema, onSelect, limit }) => {
 			if (value.length <= 2) return
 			const regexp = new RegExp(`\\b${value}`, "i")
 			const DB = await getDB()
-			const query = DB[schema.title]
+			const search = { [fieldName]: { $regex: regexp } }
+			const query = DB[collection]
 				.find()
-				.where({ name: { $regex: regexp } })
+				.where(search)
+				// .where({ name: { $regex: regexp } })
 				.limit(limit)
 			const results = await query.exec()
 			setItems(results)
@@ -42,15 +45,13 @@ export const AutosuggestComboBox = ({ schema, onSelect, limit }) => {
 			<div {...getComboboxProps()}>
 				<Input
 					{...getInputProps()}
-					border="none"
-					borderBottom="1px solid #8D8D8D"
-					bg="field01"
-					h="5"
+					placeholder={fieldName[0].toUpperCase() + fieldName.substring(1)}
 				/>
 			</div>
 			<UnorderedList
 				{...getMenuProps()}
 				position="absolute"
+				w="100%"
 				m="0"
 				px="2"
 				bg="ui01"
@@ -63,10 +64,11 @@ export const AutosuggestComboBox = ({ schema, onSelect, limit }) => {
 							{...getItemProps({ item, index })}
 							h="5"
 							alignItems="center"
+							borderTop="1px solid #E0E0E0"
 							_hover={{ background: "hoverui" }}
-							_notLast={{ borderBottom: "1px solid #E0E0E0" }}
+							// _notLast={{ borderBottom: "1px solid #E0E0E0" }}
 						>
-							<Box minW={["312px"]}>{item?.name}</Box>
+							<Box minW={["312px"]}>{item[fieldName]}</Box>
 						</Flex>
 					))}
 			</UnorderedList>

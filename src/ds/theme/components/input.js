@@ -192,16 +192,34 @@ const variantUnstyled = {
 	},
 }
 
+const variantCarbon = {
+	field: {
+		bg: "field01",
+		px: 2,
+		height: "5",
+		border: "none",
+		borderBottom: "input",
+		textStyle: "bodyshort1",
+		_focus: {
+			borderBottom: "1px solid transparent",
+			outlineWidth: "1px",
+			outlineStyle: "solid",
+			outlineColor: "interactive01",
+		},
+	},
+}
+
 const variants = {
 	outline: variantOutline,
 	filled: variantFilled,
 	flushed: variantFlushed,
 	unstyled: variantUnstyled,
+	carbon: variantCarbon,
 }
 
 const defaultProps = {
 	size: "md",
-	variant: "outline",
+	variant: "carbon",
 }
 
 const Input = {

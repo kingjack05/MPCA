@@ -76,6 +76,29 @@ export const patientSchema = {
 	required: ["name"],
 }
 
+export const templateSchema = {
+	title: "templates",
+	description: "problem template",
+	version: 0,
+	primaryKey: "_id",
+	type: "object",
+	properties: {
+		_id: { type: "string" },
+		problem: { type: "string" },
+		status: { type: "string" },
+		info: {
+			type: "array",
+			items: {
+				type: "object",
+				properties: {
+					category: { type: "string" },
+					content: { type: "object" },
+				},
+			},
+		},
+	},
+}
+
 export const workupSchema = {
 	title: "workups",
 	description: "workup data",

@@ -1,6 +1,11 @@
+import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
+import { useDB } from "../../../components/Context Providers/DBContext"
+import { medsSchema } from "../../../schema"
+
 import {
 	ArrowDown,
 	ArrowUp,
+	Export,
 	LicenseDraft,
 	Notebook,
 	Pills,
@@ -21,10 +26,10 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
-import { medsSchema } from "../../../schema"
+import { v4 as uuid } from "uuid"
 
 export const ProblemDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
+	const { DB } = useDB()
 	const reorderProblem = async (patient, problemIndex, direction) => {
 		if (direction === "up") {
 			await patient.atomicUpdate((oldData) => {
@@ -48,6 +53,19 @@ export const ProblemDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 			<DrawerContent>
 				<DrawerBody bg="mainTheme">
 					<Flex direction="row-reverse">
+						<Box
+							as="button"
+							onClick={async () => {
+								const data = { ...patient.problems[problemIndex], _id: uuid() }
+								await DB.templates.insert(data)
+								onClose()
+							}}
+							border="none"
+							bg="inherit"
+							p="1.5"
+						>
+							<Export size={32} fill="white" />
+						</Box>
 						<Box
 							as="button"
 							onClick={async () => {

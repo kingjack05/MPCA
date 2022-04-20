@@ -1,7 +1,7 @@
 import { createRxDatabase } from "rxdb"
 import { getRxStorageLoki } from "rxdb/plugins/lokijs"
 import * as idb from "lokijs/src/incremental-indexeddb-adapter"
-import { patientSchema, workupSchema, medsSchema, labsSchema } from "./schema"
+import { patientSchema, templateSchema, workupSchema, medsSchema, labsSchema } from "./schema"
 
 let dbPromise = null
 
@@ -23,6 +23,7 @@ const _create = async () => {
 		patients: {
 			schema: patientSchema,
 		},
+		templates: { schema: templateSchema },
 		workups: {
 			schema: workupSchema,
 		},
