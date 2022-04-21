@@ -12,42 +12,6 @@ import {
 } from "@chakra-ui/react"
 import RadioGroup from "../../../components/RadioGroup"
 
-export const CreateProblemModal = ({ isOpen, onClose, patient }) => {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm()
-
-	const addProblem = async (data) => {
-		await patient.atomicUpdate((oldData) => {
-			const problem = { ...data, info: [] }
-			oldData.problems.push(problem)
-			return oldData
-		})
-		onClose()
-	}
-
-	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
-			<ModalOverlay />
-			<ModalContent>
-				<ModalHeader>Add Problem</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<form onSubmit={handleSubmit(addProblem)} autoComplete="off">
-						<Input {...register("problem", { required: true })} placeholder="Problem" />
-						<Text>{errors.problem ? "Problem is required." : " "}</Text>
-						<Button mt="2" type="submit">
-							Add
-						</Button>
-					</form>
-				</ModalBody>
-			</ModalContent>
-		</Modal>
-	)
-}
-
 export const UpdateProblemModal = ({ isOpen, onClose, patient, problemIndex }) => {
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isCentered>

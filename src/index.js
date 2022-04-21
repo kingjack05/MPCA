@@ -3,6 +3,7 @@ import { DBContext } from "./components/Context Providers/DBContext"
 import { DrawerContext } from "./components/DrawerContext"
 import theme from "./ds/theme"
 import "./index.css"
+import MedsDB from "./pages/DB/MedsDB"
 import PatientMainPage from "./pages/PatientMainPage"
 import Test from "./pages/Test"
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration"
@@ -11,6 +12,8 @@ import { ChakraProvider } from "@chakra-ui/react"
 import React from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { MainLayout } from "./layout/MainLayout"
+import { TemplatesDB } from "./pages/DB/TemplatesDB"
 
 const container = document.getElementById("root")
 const root = createRoot(container)
@@ -21,7 +24,13 @@ root.render(
 				<DrawerContext>
 					<BrowserRouter>
 						<Routes>
-							<Route path="/" element={<App />} />
+							<Route element={<MainLayout />}>
+								<Route path="/" element={<App />} />
+								<Route path="db">
+									<Route path="templates" element={<TemplatesDB />} />
+									<Route path="meds" element={<MedsDB />} />
+								</Route>
+							</Route>
 							<Route path="/patient/:_id" element={<PatientMainPage />} />
 							<Route path="/test" element={<Test />} />
 						</Routes>

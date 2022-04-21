@@ -1,12 +1,19 @@
-import { Header } from "./layout/Header"
+import { pageNameAtom } from "./atoms"
 import PatientList from "./pages/PatientList"
 
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react"
+import { useUpdateAtom } from "jotai/utils"
+import { useEffect } from "react"
 
 function App() {
+	const setPageName = useUpdateAtom(pageNameAtom)
+
+	useEffect(() => {
+		setPageName("Main Page")
+	}, [setPageName])
+
 	return (
 		<>
-			<Header pageName="Patient List" />
 			<Tabs variant="line">
 				<TabList>
 					<Tab>Patients</Tab>
@@ -19,10 +26,7 @@ function App() {
 						<PatientList />
 					</TabPanel>
 					<TabPanel>
-						<p>two!</p>
-					</TabPanel>
-					<TabPanel>
-						<p>three!</p>
+						<p>Todos</p>
 					</TabPanel>
 				</TabPanels>
 			</Tabs>

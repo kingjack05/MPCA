@@ -1,8 +1,26 @@
 import { useEffect, useRef, useState } from "react"
-import { usePagination, useTable } from "react-table"
+import { useGlobalFilter, usePagination, useTable } from "react-table"
 
 import { getDB } from "../../db"
 import { v4 as uuid } from "uuid"
+import {
+	Input,
+	Select,
+	Table as ChakraTable,
+	Thead,
+	Tbody,
+	Tr,
+	Th,
+	Td,
+	Box,
+	Flex,
+	Button,
+} from "@chakra-ui/react"
+import { CaretRight } from "@carbon/icons-react"
+import { CaretLeft } from "@carbon/icons-react"
+import { Search } from "@carbon/icons-react"
+import { Add } from "@carbon/icons-react"
+import { TrashCan } from "@carbon/icons-react"
 
 function CRUDTable({ schema }) {
 	const [data, setData] = useState([])
@@ -33,21 +51,19 @@ function CRUDTable({ schema }) {
 	return (
 		<div>
 			<Table
-				columns={Object.keys(schema.properties)
-					.filter((property) => property !== "_id")
-					.map((property) => {
-						var columnObj = { Header: property, accessor: property }
-						return columnObj
-					})}
+				columns={[
+					...Object.keys(schema.properties)
+						.filter((property) => property !== "_id")
+						.map((property) => {
+							var columnObj = { Header: property, accessor: property }
+							return columnObj
+						}),
+				]}
 				data={data}
-			/>
-			<button
-				onClick={async () => {
+				addItem={async () => {
 					await addData({})
 				}}
-			>
-				Add Item
-			</button>
+			/>
 		</div>
 	)
 }
@@ -74,7 +90,7 @@ const EditableCell = ({ value: initialValue = "", row: { index }, column: { id }
 		setValue(initialValue)
 	}, [initialValue])
 
-	return <input value={value} onChange={onChange} onBlur={onBlur} />
+	return <Input variant="unstyled" value={value} onChange={onChange} onBlur={onBlur} />
 }
 
 // Set our editable cell renderer as the default Cell renderer
@@ -82,7 +98,7 @@ const defaultColumn = {
 	Cell: EditableCell,
 }
 
-function Table({ columns, data, skipPageReset }) {
+function Table({ columns, data, skipPageReset, addItem }) {
 	// For this example, we're using pagination to illustrate how to stop
 	// the current page from resetting when our data changes
 	// Otherwise, nothing is different here.
@@ -91,11 +107,11 @@ function Table({ columns, data, skipPageReset }) {
 		getTableBodyProps,
 		headerGroups,
 		prepareRow,
+		setGlobalFilter,
 		page,
 		canPreviousPage,
 		canNextPage,
 		pageOptions,
-		pageCount,
 		gotoPage,
 		nextPage,
 		previousPage,
@@ -109,87 +125,121 @@ function Table({ columns, data, skipPageReset }) {
 			// use the skipPageReset option to disable page resetting temporarily
 			autoResetPage: !skipPageReset,
 		},
+		useGlobalFilter,
 		usePagination
 	)
-
+	const [searchExpanded, setSearchExpanded] = useState(false)
 	return (
 		<>
-			<table {...getTableProps()}>
-				<thead>
+			<Flex h="6" bg="ui01" alignItems="center" direction="row-reverse">
+				<Button onClick={addItem} variant="primary" p="1" borderRadius="none">
+					<Add size={32} />
+				</Button>
+				<Flex
+					as="button"
+					flex={searchExpanded ? "1" : ""}
+					onFocus={() => {
+						if (!searchExpanded) {
+							setSearchExpanded(true)
+						}
+					}}
+					alignItems="center"
+					border="none"
+				>
+					<Box bg="ui01">
+						<Search size={20} />
+					</Box>
+					<Input
+						variant="carbon"
+						display={searchExpanded ? "" : "none"}
+						onChange={(e) => {
+							setGlobalFilter(e.target.value)
+						}}
+						onBlur={() => {
+							setSearchExpanded(false)
+						}}
+					/>
+				</Flex>
+			</Flex>
+
+			<ChakraTable variant="carbon" {...getTableProps()}>
+				<Thead bg="ui03">
 					{headerGroups.map((headerGroup) => (
-						<tr {...headerGroup.getHeaderGroupProps()}>
+						<Tr {...headerGroup.getHeaderGroupProps()}>
 							{headerGroup.headers.map((column) => (
-								<th {...column.getHeaderProps()}>{column.render("Header")}</th>
+								<Th {...column.getHeaderProps()}>{column.render("Header")}</Th>
 							))}
-						</tr>
+							<Th></Th>
+						</Tr>
 					))}
-				</thead>
-				<tbody {...getTableBodyProps()}>
+				</Thead>
+				<Tbody {...getTableBodyProps()}>
 					{page.map((row, i) => {
 						prepareRow(row)
 						return (
-							<tr {...row.getRowProps()}>
+							<Tr {...row.getRowProps()}>
 								{row.cells.map((cell) => {
-									return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+									return <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
 								})}
-								<td>
-									<button
+								<Td>
+									<Button
 										onClick={async () => {
 											await data[row.index].remove()
 										}}
+										border="none"
 									>
-										delete
-									</button>
-								</td>
-							</tr>
+										<TrashCan size={24} />
+									</Button>
+								</Td>
+							</Tr>
 						)
 					})}
-				</tbody>
-			</table>
-			<div className="pagination">
-				<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-					{"<<"}
-				</button>{" "}
-				<button onClick={() => previousPage()} disabled={!canPreviousPage}>
-					{"<"}
-				</button>{" "}
-				<button onClick={() => nextPage()} disabled={!canNextPage}>
-					{">"}
-				</button>{" "}
-				<button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-					{">>"}
-				</button>{" "}
-				<span>
-					Page{" "}
-					<strong>
-						{pageIndex + 1} of {pageOptions.length}
-					</strong>{" "}
-				</span>
-				<span>
-					| Go to page:{" "}
-					<input
+				</Tbody>
+			</ChakraTable>
+			<Flex h="6" bg="ui01">
+				<Flex alignItems="center" flex="1">
+					Items per page:&nbsp;
+					<Select
+						value={pageSize}
+						onChange={(e) => {
+							setPageSize(Number(e.target.value))
+						}}
+						w="12"
+						h="5"
+					>
+						{[10, 20, 30, 40, 50].map((pageSize) => (
+							<option key={pageSize} value={pageSize}>
+								{pageSize}
+							</option>
+						))}
+					</Select>
+				</Flex>
+				<Flex alignItems="center">
+					<Input
 						type="number"
 						defaultValue={pageIndex + 1}
 						onChange={(e) => {
 							const page = e.target.value ? Number(e.target.value) - 1 : 0
 							gotoPage(page)
 						}}
-						style={{ width: "100px" }}
+						variant="carbon"
+						p="0"
+						w="6"
 					/>
-				</span>{" "}
-				<select
-					value={pageSize}
-					onChange={(e) => {
-						setPageSize(Number(e.target.value))
-					}}
+					&nbsp; of {pageOptions.length} pages
+				</Flex>
+				<Box
+					as="button"
+					onClick={() => previousPage()}
+					disabled={!canPreviousPage}
+					border="none"
 				>
-					{[10, 20, 30, 40, 50].map((pageSize) => (
-						<option key={pageSize} value={pageSize}>
-							Show {pageSize}
-						</option>
-					))}
-				</select>
-			</div>
+					<CaretLeft size={32} />
+				</Box>
+				<Box as="button" onClick={() => nextPage()} disabled={!canNextPage} border="none">
+					<CaretRight size={32} />
+				</Box>
+			</Flex>
 		</>
 	)
 }

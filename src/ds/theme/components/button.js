@@ -148,6 +148,7 @@ const variantUnstyled = {
 	color: "inherit",
 	display: "inline",
 	lineHeight: "inherit",
+	border: "none",
 	m: 0,
 	p: 0,
 }

@@ -182,6 +182,7 @@ const variantFlushed = (props) => {
 const variantUnstyled = {
 	field: {
 		bg: "transparent",
+		border: "none",
 		px: 0,
 		height: "auto",
 	},

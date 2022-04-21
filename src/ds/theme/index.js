@@ -19,7 +19,16 @@ const theme = extendTheme(
 		breakpoints,
 		zIndices: defaultTheme.zIndices,
 		// components: {},
-		styles: {},
+		styles: {
+			global: {
+				"html, body": {
+					background: "ui01",
+				},
+				a: {
+					color: "teal.500",
+				},
+			},
+		},
 		borders: {},
 		colors: {},
 		radii: {},

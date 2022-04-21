@@ -7,6 +7,17 @@ const layerStyles = {
 		border: "none",
 		borderRadius: "base",
 	},
+	hamburgerMenuItem: {
+		display: "flex",
+		alignItems: "center",
+		h: "4",
+		color: "gray.700",
+		textDecoration: "none",
+		_hover: {
+			bg: "gray.200",
+			color: "gray.1000",
+		},
+	},
 	transparentBorder: {
 		border: "2px",
 		borderRadius: "lg",

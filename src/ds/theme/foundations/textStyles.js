@@ -6,26 +6,6 @@ export const FONT_WEIGHT = {
 }
 
 const textStyles = {
-	display1: {
-		fontSize: "4.8rem",
-		fontWeight: FONT_WEIGHT.SEMI,
-		lineHeight: "6rem",
-	},
-	display2: {
-		fontSize: "4rem",
-		fontWeight: FONT_WEIGHT.SEMI,
-		lineHeight: "4.8rem",
-	},
-	h1Semi: {
-		fontSize: "3.2rem",
-		fontWeight: FONT_WEIGHT.SEMI,
-		lineHeight: "4.0rem",
-	},
-	body1Semi: {
-		fontSize: "2rem",
-		fontWeight: FONT_WEIGHT.SEMI,
-		lineHeight: "2.8rem",
-	},
 	bodyShort1: {
 		fontSize: "14px",
 		fontWeight: FONT_WEIGHT.NORMAL,
@@ -36,11 +16,6 @@ const textStyles = {
 		fontSize: ["16px"],
 		fontWeight: FONT_WEIGHT.NORMAL,
 		lineHeight: ["24px"],
-	},
-	body2Semi: {
-		fontSize: "1.6rem",
-		fontWeight: FONT_WEIGHT.SEMI,
-		lineHeight: "2.4rem",
 	},
 	h2: {
 		fontSize: ["16px"],
