@@ -14,12 +14,12 @@ const MedsDB = () => {
 	}, [setPageName])
 
 	return (
-		<Box bg="ui01">
+		<>
 			<Box fontSize="20px" mt="2" mb="3" pl="2">
 				Meds
 			</Box>
 			<CRUDTable schema={medsSchema} />
-		</Box>
+		</>
 	)
 }
 

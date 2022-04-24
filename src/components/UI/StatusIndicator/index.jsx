@@ -1,4 +1,3 @@
-import React from "react"
 import { Circle } from "@chakra-ui/react"
 
 function StatusIndicator({ status }) {

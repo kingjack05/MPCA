@@ -16,11 +16,7 @@ import {
 	Flex,
 	Button,
 } from "@chakra-ui/react"
-import { CaretRight } from "@carbon/icons-react"
-import { CaretLeft } from "@carbon/icons-react"
-import { Search } from "@carbon/icons-react"
-import { Add } from "@carbon/icons-react"
-import { TrashCan } from "@carbon/icons-react"
+import { Add, CaretLeft, CaretRight, Search, TrashCan } from "@carbon/icons-react"
 
 function CRUDTable({ schema }) {
 	const [data, setData] = useState([])
@@ -98,7 +94,7 @@ const defaultColumn = {
 	Cell: EditableCell,
 }
 
-function Table({ columns, data, skipPageReset, addItem }) {
+export function Table({ columns, data, skipPageReset, addItem, plugins = [], variant = "carbon" }) {
 	// For this example, we're using pagination to illustrate how to stop
 	// the current page from resetting when our data changes
 	// Otherwise, nothing is different here.
@@ -126,12 +122,13 @@ function Table({ columns, data, skipPageReset, addItem }) {
 			autoResetPage: !skipPageReset,
 		},
 		useGlobalFilter,
+		...plugins,
 		usePagination
 	)
 	const [searchExpanded, setSearchExpanded] = useState(false)
 	return (
 		<>
-			<Flex h="6" bg="ui01" alignItems="center" direction="row-reverse">
+			<Flex h="6" alignItems="center" direction="row-reverse">
 				<Button onClick={addItem} variant="primary" p="1" borderRadius="none">
 					<Add size={32} />
 				</Button>
@@ -143,10 +140,11 @@ function Table({ columns, data, skipPageReset, addItem }) {
 							setSearchExpanded(true)
 						}
 					}}
+					bg="transparent"
 					alignItems="center"
 					border="none"
 				>
-					<Box bg="ui01">
+					<Box>
 						<Search size={20} />
 					</Box>
 					<Input
@@ -162,7 +160,7 @@ function Table({ columns, data, skipPageReset, addItem }) {
 				</Flex>
 			</Flex>
 
-			<ChakraTable variant="carbon" {...getTableProps()}>
+			<ChakraTable variant={variant} {...getTableProps()}>
 				<Thead bg="ui03">
 					{headerGroups.map((headerGroup) => (
 						<Tr {...headerGroup.getHeaderGroupProps()}>

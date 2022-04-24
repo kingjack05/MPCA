@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useCombobox } from "downshift"
-import useDebounce from "../../hooks/utility/useDebounce"
+import { useDebounce } from "../../hooks/utility/useDebounce"
 import { getDB } from "../../db"
 import { Box, Flex, Input, UnorderedList } from "@chakra-ui/react"
 

@@ -1,6 +1,6 @@
 import { usePatientContext } from "../../../components/Context Providers/PatientContext"
 import { ProblemContext } from "../../../components/Context Providers/ProblemContext"
-import StatusIndicator from "../../../components/StatusIndicator"
+import StatusIndicator from "../../../components/UI/StatusIndicator"
 import SwipeEditBox from "../../../components/SwipeEditBox"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
 import { MedicationInfo } from "./infoItems"

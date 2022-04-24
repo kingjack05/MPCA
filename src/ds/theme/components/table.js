@@ -128,11 +128,30 @@ const variantCarbon = {
 	},
 }
 
+const variantUnstyled = {
+	table: {
+		tableLayout: "auto",
+	},
+	th: {
+		flex: "0",
+		m: "0",
+		p: "0",
+		textAlign: "start",
+		textTransform: "unset",
+	},
+	td: {
+		flex: "0",
+		m: "0",
+		p: "0",
+		textAlign: "start",
+	},
+}
+
 const variants = {
 	carbon: variantCarbon,
 	simple: variantSimple,
 	striped: variantStripe,
-	unstyled: {},
+	unstyled: variantUnstyled,
 }
 
 const sizes = {
