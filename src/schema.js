@@ -72,8 +72,18 @@ export const patientSchema = {
 				},
 			},
 		},
+		createdAt: {
+			type: "string",
+			format: "date-time",
+		},
+		updatedAt: {
+			type: "string",
+			format: "date-time",
+		},
 	},
 	required: ["name"],
+	indexes: ["name", "createdAt", "updatedAt"],
+	additionalProperties: true,
 }
 
 export const templateSchema = {

@@ -1,7 +1,7 @@
 import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
 import { usePatientContext } from "../../../components/Context Providers/PatientContext"
 import { useProblemContext } from "../../../components/Context Providers/ProblemContext"
-import { useDrawer } from "../../../components/DrawerContext"
+import { useDrawer } from "../../../components/Context Providers/DrawerContext"
 import SwipeEditBox from "../../../components/SwipeEditBox"
 import { medsSchema } from "../../../schema"
 

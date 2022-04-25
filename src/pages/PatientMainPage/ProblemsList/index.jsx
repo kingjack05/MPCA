@@ -1,7 +1,12 @@
+// Context
+import { useDrawer } from "../../../components/Context Providers/DrawerContext"
 import { usePatientContext } from "../../../components/Context Providers/PatientContext"
 import { ProblemContext } from "../../../components/Context Providers/ProblemContext"
-import StatusIndicator from "../../../components/UI/StatusIndicator"
+
+// Component
+import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
 import SwipeEditBox from "../../../components/SwipeEditBox"
+import StatusIndicator from "../../../components/UI/StatusIndicator"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
 import { MedicationInfo } from "./infoItems"
 import { DeleteProblemModal, UpdateProblemModal } from "./modals"
@@ -26,8 +31,6 @@ import {
 import { useCallback, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useLongPress } from "use-long-press"
-import { useDrawer } from "../../../components/DrawerContext"
-import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
 
 function ProblemsList({ patient }) {
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()

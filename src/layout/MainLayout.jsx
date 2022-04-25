@@ -1,6 +1,6 @@
 import { pageNameAtom } from "../atoms"
 
-import { Menu } from "@carbon/icons-react"
+import { Menu as MenuIcon, UserAvatar } from "@carbon/icons-react"
 import {
 	Accordion,
 	AccordionButton,
@@ -12,11 +12,16 @@ import {
 	DrawerBody,
 	DrawerContent,
 	Flex,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuItem,
 	useDisclosure,
 } from "@chakra-ui/react"
 import { useAtomValue } from "jotai"
 import React from "react"
 import { Link, Outlet } from "react-router-dom"
+import { useAuth0 } from "@auth0/auth0-react"
 
 const Header = () => {
 	const pageName = useAtomValue(pageNameAtom)
@@ -36,11 +41,12 @@ const Header = () => {
 					bg="transparent"
 					color="white"
 				>
-					<Menu size={32} />{" "}
+					<MenuIcon size={24} />
 				</Box>
-				<Box textStyle="bodyshort1" color="white">
+				<Box flex="1" textStyle="bodyshort1" color="white">
 					{pageName}
 				</Box>
+				<UserMenu />
 			</Flex>
 			<HamburgerMenu isOpen={isOpenHamburgerMenu} onClose={onCloseHamburgerMenu} />
 		</>
@@ -77,6 +83,26 @@ const HamburgerMenu = ({ isOpen, onClose }) => {
 				</DrawerContent>
 			</Drawer>
 		</>
+	)
+}
+
+const UserMenu = () => {
+	const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0()
+	return (
+		<Menu>
+			<MenuButton border="none" bg="transparent" color="white">
+				<UserAvatar size={24} />
+			</MenuButton>
+			<MenuList>
+				{isAuthenticated ? (
+					<MenuItem onClick={() => logout({ returnTo: window.location.origin })}>
+						Logout
+					</MenuItem>
+				) : (
+					<MenuItem onClick={() => loginWithRedirect()}>Login</MenuItem>
+				)}
+			</MenuList>
+		</Menu>
 	)
 }
 

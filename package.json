@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@auth0/auth0-react": "^1.10.0",
 		"@carbon/icons-react": "^11.0.2",
 		"@chakra-ui/react": "^1.8.6",
 		"@emotion/react": "^11.8.2",
