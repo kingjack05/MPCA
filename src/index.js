@@ -25,6 +25,7 @@ root.render(
 				domain="dev-yu40ug8e.us.auth0.com"
 				clientId="Xh51UL907wUZik0qZLKL2a6xat7Qy6BF"
 				redirectUri={window.location.origin}
+				audience="kingjack05@gmail.com"
 			>
 				<DBContext>
 					<DrawerContext>

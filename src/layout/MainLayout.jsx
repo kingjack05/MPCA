@@ -19,7 +19,6 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react"
 import { useAtomValue } from "jotai"
-import React from "react"
 import { Link, Outlet } from "react-router-dom"
 import { useAuth0 } from "@auth0/auth0-react"
 
@@ -88,6 +87,7 @@ const HamburgerMenu = ({ isOpen, onClose }) => {
 
 const UserMenu = () => {
 	const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0()
+
 	return (
 		<Menu>
 			<MenuButton border="none" bg="transparent" color="white">
@@ -95,9 +95,11 @@ const UserMenu = () => {
 			</MenuButton>
 			<MenuList>
 				{isAuthenticated ? (
-					<MenuItem onClick={() => logout({ returnTo: window.location.origin })}>
-						Logout
-					</MenuItem>
+					<>
+						<MenuItem onClick={() => logout({ returnTo: window.location.origin })}>
+							Logout
+						</MenuItem>
+					</>
 				) : (
 					<MenuItem onClick={() => loginWithRedirect()}>Login</MenuItem>
 				)}

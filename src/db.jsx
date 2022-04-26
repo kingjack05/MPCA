@@ -1,24 +1,24 @@
-import { createRxDatabase } from "rxdb"
+import { createRxDatabase, addRxPlugin } from "rxdb"
 import { getRxStorageLoki } from "rxdb/plugins/lokijs"
 import * as idb from "lokijs/src/incremental-indexeddb-adapter"
 import { patientSchema, templateSchema, workupSchema, medsSchema, labsSchema } from "./schema"
+import { RxDBReplicationGraphQLPlugin } from "rxdb/plugins/replication-graphql"
+
+addRxPlugin(RxDBReplicationGraphQLPlugin)
 
 let dbPromise = null
 
 const _create = async () => {
 	// Create DB
-	console.log("DatabaseService: creating database..")
 	const db = await createRxDatabase({
 		name: "mydatabase",
 		storage: getRxStorageLoki({
 			adapter: new idb(),
 		}),
 	})
-	console.log("DatabaseService: created database")
 	window["db"] = db // write to window for debugging
 
 	// Create Collection
-	console.log("DatabaseService: create collections")
 	await db.addCollections({
 		patients: {
 			schema: patientSchema,
