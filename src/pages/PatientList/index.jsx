@@ -1,9 +1,10 @@
-import { Box, Circle, Flex, VStack, useDisclosure } from "@chakra-ui/react"
-import { CreatePatientModal, DeletePatientModal, EditPatientModal } from "./modals"
-import { useEffect, useRef, useState } from "react"
-
+import StatusIndicator from "../../components/UI/StatusIndicator"
 import SwipeEditBox from "../../components/SwipeEditBox"
 import { getDB } from "../../db"
+import { CreatePatientModal, DeletePatientModal, EditPatientModal } from "./modals"
+
+import { Box, Flex, VStack, useDisclosure } from "@chakra-ui/react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 function PatientList() {
@@ -133,15 +134,6 @@ function PatientBox({ _id, name, problem, summary, onEdit, onDelete }) {
 			</Flex>
 		</SwipeEditBox>
 	)
-}
-
-function StatusIndicator({ status }) {
-	let status2Color = {
-		Y: "warning",
-	}
-	const color = status2Color[status]
-
-	return <Circle size="1" bg={color} mx="1" />
 }
 
 function AddPatient({ onClick }) {

@@ -76,13 +76,13 @@ export const patientSchema = {
 			type: "string",
 			format: "date-time",
 		},
-		updatedAt: {
+		updated_at: {
 			type: "string",
 			format: "date-time",
 		},
 	},
 	required: ["name"],
-	indexes: ["name", "createdAt", "updatedAt"],
+	indexes: ["name", "updated_at"],
 	additionalProperties: true,
 }
 

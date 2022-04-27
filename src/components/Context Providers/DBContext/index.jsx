@@ -32,16 +32,60 @@ export const DBContext = ({ children }) => {
 
 			const patientsPushQueryBuilder = (doc) => {
 				console.log(doc)
-
-				const query = `
-				mutation MyQ {
-					insert_todos(objects: {text: "YoYoMan"}) {
-					  affected_rows
+				const { _id, name, problems, logs, meds, labs } = doc
+				const data = { problems, logs, meds, labs }
+				const query = /* GraphQL */ `
+				mutation pushPatient ($data: jsonb) {
+					delete_user_patient(where: {patient_id: {_eq: "${_id}"}}) {
+						affected_rows
 					}
+					insert_patients(
+						objects: {_id: "${_id}", name: "${name}", data: $data, taken_care_by:{data:{}}}, 
+						on_conflict: {constraint: patients_pkey, update_columns: [name, data, updated_at]}) {
+							affected_rows
+					  }
 				  }
 			`
+				const variables = { data }
 				return {
 					query,
+					variables,
+				}
+			}
+
+			const patientsPullQueryBuilder = (doc) => {
+				if (!doc) {
+					doc = {
+						_id: "",
+						updated_at: new Date(0).toUTCString(),
+					}
+				}
+				const { updated_at } = doc
+				const query = /* GraphQL */ `{
+					patients(where: {updated_at: {_gt: "${updated_at}"}}, 
+					         order_by: [{updated_at: asc}, {_id: asc}]) {
+					  _id
+					  data
+					  name
+					  updated_at
+					}
+				  }`
+				return {
+					query,
+				}
+			}
+
+			const patientsPullModifier = (doc) => {
+				const { _id, name, data, updated_at } = doc
+				const { problems, logs, meds, labs } = data
+				return {
+					_id,
+					name,
+					problems,
+					logs,
+					meds,
+					labs,
+					updated_at,
 				}
 			}
 
@@ -55,12 +99,16 @@ export const DBContext = ({ children }) => {
 					batchSize: 5,
 					modifier: (d) => d,
 				},
+				pull: {
+					queryBuilder: patientsPullQueryBuilder,
+					batchSize: 5,
+					modifier: patientsPullModifier,
+				},
 				deletedFlag: "deleted",
 				live: true,
 			})
 
 			patientsReplicationState.error$.subscribe((error) => {
-				console.log("something was wrong")
 				console.dir(error)
 			})
 		}
