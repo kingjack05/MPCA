@@ -24,6 +24,9 @@ const theme = extendTheme(
 				"html, body": {
 					background: "ui01",
 				},
+				"#root": {
+					height: "100%",
+				},
 				a: {
 					color: "teal.500",
 				},

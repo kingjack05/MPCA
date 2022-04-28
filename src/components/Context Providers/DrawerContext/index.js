@@ -32,7 +32,10 @@ export function DrawerContext({ children }) {
 		</>
 	)
 }
-
+/**
+ *
+ * @returns {{onOpenDrawer, onCloseDrawer, setHeader, setComponent}}
+ */
 export function useDrawer() {
 	return useContext(Context)
 }

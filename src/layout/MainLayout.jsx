@@ -111,8 +111,12 @@ const UserMenu = () => {
 export const MainLayout = () => {
 	return (
 		<>
-			<Header />
-			<Outlet />
+			<Flex height="100%" direction="column">
+				<Header />
+				<Box flex="1">
+					<Outlet />
+				</Box>
+			</Flex>
 		</>
 	)
 }

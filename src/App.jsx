@@ -14,7 +14,7 @@ function App() {
 
 	return (
 		<>
-			<Tabs variant="line">
+			<Tabs variant="line" h="100%" bg="background">
 				<TabList>
 					<Tab>Patients</Tab>
 					<Tab>TODOs</Tab>

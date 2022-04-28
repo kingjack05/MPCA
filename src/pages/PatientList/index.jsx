@@ -1,16 +1,20 @@
+// Context
+import { useDrawer } from "../../components/Context Providers/DrawerContext"
+
 import StatusIndicator from "../../components/UI/StatusIndicator"
 import SwipeEditBox from "../../components/SwipeEditBox"
 import { getDB } from "../../db"
-import { CreatePatientModal, DeletePatientModal, EditPatientModal } from "./modals"
 
-import { Box, Flex, VStack, useDisclosure } from "@chakra-ui/react"
+import { Box, Flex, VStack } from "@chakra-ui/react"
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { v4 as uuid } from "uuid"
+import { PatientForm } from "../../components/UI/Forms/PatientForm"
+import { DeleteDialogue } from "../../components/UI/Dialogues/DeleteDialogue"
 
 function PatientList() {
+	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
 	const [patients, setpatients] = useState([])
-	const [patientToEdit, setPatientToEdit] = useState()
-	const [patientToDelete, setPatientToDelete] = useState()
 	const dbref = useRef()
 	const subref = useRef()
 
@@ -34,57 +38,39 @@ function PatientList() {
 		fetchData()
 	}, [])
 
-	const {
-		isOpen: isOpenCreatePatientModal,
-		onOpen: onOpenCreatePatientModal,
-		onClose: onCloseCreatePatientModal,
-	} = useDisclosure()
-	const {
-		isOpen: isOpenUpdatePatientModal,
-		onOpen: openUpdatePatientModal,
-		onClose: onCloseUpdatePatientModal,
-	} = useDisclosure()
-	const {
-		isOpen: isOpenDeletePatientModal,
-		onOpen: openDeletePatientModal,
-		onClose: onDeleteUpdatePatientModal,
-	} = useDisclosure()
 	return (
 		<>
-			<VStack mt="1">
-				{patients.map(({ _id, name, problems, summary }) => (
-					<PatientBox
-						_id={_id}
-						name={name}
-						problem={problems[0]}
-						key={_id}
-						summary={summary}
-						onEdit={() => {
-							setPatientToEdit(_id)
-							openUpdatePatientModal()
-						}}
-						onDelete={() => {
-							setPatientToDelete(_id)
-							openDeletePatientModal()
-						}}
-					/>
-				))}
-				<AddPatient onClick={onOpenCreatePatientModal} />
+			<VStack w="100%" mt="1">
+				{patients.map((patient) => {
+					const { _id, name, problems, summary } = patient
+					return (
+						<PatientBox
+							_id={_id}
+							name={name}
+							problem={problems[0]}
+							key={_id}
+							summary={summary}
+							onEdit={() => {
+								onOpenDrawer()
+								setHeader("Edit Patient")
+								setComponent(<UpdatePatientFormWrapper patient={patient} />)
+							}}
+							onDelete={() => {
+								onOpenDrawer()
+								setHeader("Delete Patient")
+								setComponent(<DeletePatientDialogueWrapper patient={patient} />)
+							}}
+						/>
+					)
+				})}
+				<CreatePatientButton
+					onClick={() => {
+						onOpenDrawer()
+						setHeader("Add Patient")
+						setComponent(<CreatePatientFormWrapper />)
+					}}
+				/>
 			</VStack>
-			<CreatePatientModal
-				isOpen={isOpenCreatePatientModal}
-				onClose={onCloseCreatePatientModal}
-			/>
-			<EditPatientModal
-				isOpen={isOpenUpdatePatientModal}
-				onClose={onCloseUpdatePatientModal}
-				patientToEdit={patientToEdit}
-			/>
-			<DeletePatientModal
-				isOpen={isOpenDeletePatientModal}
-				onClose={onDeleteUpdatePatientModal}
-				patientToDelete={patientToDelete}
-			/>
 		</>
 	)
 }
@@ -94,19 +80,19 @@ function PatientBox({ _id, name, problem, summary, onEdit, onDelete }) {
 	const status = problem?.status
 
 	return (
-		<SwipeEditBox onEdit={onEdit} onDelete={onDelete}>
+		<SwipeEditBox onEdit={onEdit} onDelete={onDelete} w="100%">
 			<Flex
 				as="button"
-				align="center"
-				h="7"
-				p="0"
-				minW="304px"
-				bg="white"
-				border="none"
-				borderRadius="base"
 				onClick={() => {
 					navigate(`/patient/${_id}`)
 				}}
+				align="center"
+				h="7"
+				p="0"
+				w="100%"
+				bg="white"
+				border="none"
+				borderRadius="base"
 			>
 				<StatusIndicator status={status} />
 				<Flex direction="column">
@@ -136,18 +122,69 @@ function PatientBox({ _id, name, problem, summary, onEdit, onDelete }) {
 	)
 }
 
-function AddPatient({ onClick }) {
+function CreatePatientButton({ onClick }) {
 	return (
 		<Box
 			as="button"
 			onClick={onClick}
 			layerStyle="basicBox"
+			bg="gray.100"
+			w="100%"
 			color="text02"
 			fontStyle="italic"
 			_hover={{ color: "blue.600hover", shadow: "lg" }}
 		>
 			+ New Patient
 		</Box>
+	)
+}
+
+const CreatePatientFormWrapper = () => {
+	const { onCloseDrawer } = useDrawer()
+	const dbref = useRef()
+	useEffect(() => {
+		const loadDB = async () => {
+			dbref.current = await getDB()
+		}
+		loadDB()
+	}, [])
+
+	const createPatient = async (data) => {
+		data = { ...data, _id: uuid() }
+		dbref.current.patients.insert(data)
+	}
+
+	return <PatientForm onSubmit={createPatient} onCancel={onCloseDrawer} />
+}
+
+const UpdatePatientFormWrapper = ({ patient }) => {
+	const { onCloseDrawer } = useDrawer()
+
+	const updatePatient = (data) => {
+		patient.update({ $set: data })
+	}
+
+	return (
+		<PatientForm
+			defaultValues={{ name: patient.name, summary: patient.summary }}
+			onSubmit={updatePatient}
+			onCancel={onCloseDrawer}
+		/>
+	)
+}
+
+const DeletePatientDialogueWrapper = ({ patient }) => {
+	const { onCloseDrawer } = useDrawer()
+
+	return (
+		<DeleteDialogue
+			itemName={"Patient: " + patient.name}
+			onDelete={async () => {
+				await patient.remove()
+				onCloseDrawer()
+			}}
+			onCancel={onCloseDrawer}
+		/>
 	)
 }
 

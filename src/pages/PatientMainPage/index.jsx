@@ -3,7 +3,7 @@ import { Box, Flex, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakr
 import { ArrowLeft } from "@carbon/icons-react"
 import { PatientContext } from "../../components/Context Providers/PatientContext"
 import ProblemsList from "./ProblemsList"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { usePatient } from "../../queries/usePatient"
 
 function PatientMainPage() {
@@ -13,39 +13,52 @@ function PatientMainPage() {
 	return (
 		<>
 			<PatientContext id={params._id}>
-				<Header patient={patient} />
-				<Tabs variant="line">
-					<TabList>
-						<Tab>Problems</Tab>
-						<Tab>Logs</Tab>
-						<Tab>Meds</Tab>
-						<Tab>Labs</Tab>
-					</TabList>
+				<Flex direction="column" h="100%">
+					<Header patient={patient} />
+					<Tabs variant="line" flex="1" bg="background">
+						<TabList>
+							<Tab>Problems</Tab>
+							<Tab>Logs</Tab>
+							<Tab>Meds</Tab>
+							<Tab>Labs</Tab>
+						</TabList>
 
-					<TabPanels>
-						<TabPanel bg="background">
-							<ProblemsList patient={patient} />
-						</TabPanel>
-						<TabPanel>
-							<p>Logs!</p>
-						</TabPanel>
-						<TabPanel>
-							<p>Meds!</p>
-						</TabPanel>
-						<TabPanel>
-							<p>Labs!</p>
-						</TabPanel>
-					</TabPanels>
-				</Tabs>
+						<TabPanels>
+							<TabPanel>
+								<ProblemsList patient={patient} />
+							</TabPanel>
+							<TabPanel>
+								<p>Logs!</p>
+							</TabPanel>
+							<TabPanel>
+								<p>Meds!</p>
+							</TabPanel>
+							<TabPanel>
+								<p>Labs!</p>
+							</TabPanel>
+						</TabPanels>
+					</Tabs>
+				</Flex>
 			</PatientContext>
 		</>
 	)
 }
 
 function Header({ patient }) {
+	const navigate = useNavigate()
 	return (
-		<Box bgColor="mainTheme">
-			<Flex as="button" bgColor="inherit" m="0" p="1" border="none" color="gray.400">
+		<Box bgColor="gray.900">
+			<Flex
+				as="button"
+				onClick={() => {
+					navigate("/")
+				}}
+				bgColor="inherit"
+				m="0"
+				p="1"
+				border="none"
+				color="gray.400"
+			>
 				<ArrowLeft size={16} />
 				<Text textStyle="label1" display="inline" m="0">
 					Patients List
