@@ -6,10 +6,11 @@ import { ProblemContext } from "../../../components/Context Providers/ProblemCon
 // Component
 import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
 import SwipeEditBox from "../../../components/SwipeEditBox"
+import { ProblemForm } from "../../../components/UI/Forms/ProblemForm"
 import StatusIndicator from "../../../components/UI/StatusIndicator"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
 import { MedicationInfo } from "./infoItems"
-import { DeleteProblemModal, UpdateProblemModal } from "./modals"
+import { DeleteDialogue } from "../../../components/UI/Dialogues/DeleteDialogue"
 
 import {
 	Accordion,
@@ -20,32 +21,19 @@ import {
 	Box,
 	Button,
 	Flex,
-	Input,
 	Radio,
 	RadioGroup,
 	Stack,
-	Text,
 	VStack,
 	useDisclosure,
 } from "@chakra-ui/react"
 import { useCallback, useRef, useState } from "react"
-import { useForm } from "react-hook-form"
 import { useLongPress } from "use-long-press"
 
 function ProblemsList({ patient }) {
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
 	const [problemIndex, setProblemIndex] = useState(0)
 
-	const {
-		isOpen: isOpenUpdateProblemModal,
-		onOpen: onOpenUpdateProblemModal,
-		onClose: onCloseUpdateProblemModal,
-	} = useDisclosure()
-	const {
-		isOpen: isOpenDeleteProblemModal,
-		onOpen: onOpenDeleteProblemModal,
-		onClose: onCloseDeleteProblemModal,
-	} = useDisclosure()
 	const {
 		isOpen: isOpenProblemDrawer,
 		onOpen: onOpenProblemDrawer,
@@ -68,12 +56,21 @@ function ProblemsList({ patient }) {
 						key={index}
 						problemIndex={index}
 						onEdit={() => {
-							setProblemIndex(index)
-							onOpenUpdateProblemModal()
+							onOpenDrawer()
+							setHeader("Edit Problem")
+							setComponent(
+								<UpdateProblemFormWrapper patient={patient} problemIndex={index} />
+							)
 						}}
 						onDelete={() => {
-							setProblemIndex(index)
-							onOpenDeleteProblemModal()
+							onOpenDrawer()
+							setHeader("Delete Problem")
+							setComponent(
+								<DeleteProblemDialogueWrapper
+									patient={patient}
+									problemIndex={index}
+								/>
+							)
 						}}
 						onLongPress={() => {
 							setProblemIndex(index)
@@ -89,25 +86,13 @@ function ProblemsList({ patient }) {
 					onClick={() => {
 						onOpenDrawer()
 						setHeader("Add Problem")
-						setComponent(<CreateProblem patient={patient} />)
+						setComponent(<CreateProblemFormWrapper patient={patient} />)
 					}}
 				/>
 			</VStack>
 			<Box textStyle="body2" mt="2" mb="1">
 				Underlying Problems
 			</Box>
-			<UpdateProblemModal
-				isOpen={isOpenUpdateProblemModal}
-				onClose={onCloseUpdateProblemModal}
-				patient={patient}
-				problemIndex={problemIndex}
-			/>
-			<DeleteProblemModal
-				isOpen={isOpenDeleteProblemModal}
-				onClose={onCloseDeleteProblemModal}
-				patient={patient}
-				problemIndex={problemIndex}
-			/>
 			<ProblemDrawer
 				isOpen={isOpenProblemDrawer}
 				onClose={onCloseProblemDrawer}
@@ -168,7 +153,7 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 							</AccordionButton>
 						</h2>
 						<AccordionPanel bg="gray.100" pl="3" borderBottomRadius="0.5">
-							<AddInfo
+							<CreateInfoButton
 								onClick={() => {
 									onOpenAddInfoDrawer()
 								}}
@@ -198,16 +183,10 @@ function CreateProblemButton({ onClick }) {
 	)
 }
 
-const CreateProblem = ({ patient }) => {
+const CreateProblemFormWrapper = ({ patient }) => {
 	const { onCloseDrawer } = useDrawer()
 	const [createMode, setCreateMode] = useState("new")
 	const templateRef = useRef()
-
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm()
 
 	const addProblem = async (data) => {
 		await patient.atomicUpdate((oldData) => {
@@ -230,45 +209,7 @@ const CreateProblem = ({ patient }) => {
 					</Radio>
 				</Stack>
 			</RadioGroup>
-			{createMode === "new" && (
-				<>
-					<Box m="2">
-						<form
-							id="addProblem"
-							onSubmit={handleSubmit(addProblem)}
-							autoComplete="off"
-						>
-							<Input
-								{...register("problem", { required: true })}
-								placeholder="Problem"
-								variant="carbon"
-							/>
-							<Text>{errors.problem ? "Problem is required." : " "}</Text>
-						</form>
-					</Box>
-					<Flex>
-						<Button
-							type="submit"
-							form="addProblem"
-							flex="1"
-							borderRadius="none"
-							p="0"
-							variant="primary"
-						>
-							Add
-						</Button>
-						<Button
-							onClick={onCloseDrawer}
-							flex="1"
-							borderRadius="none"
-							bg="ui03"
-							border="none"
-						>
-							Cancel
-						</Button>
-					</Flex>
-				</>
-			)}
+			{createMode === "new" && <ProblemForm onSubmit={addProblem} onCancel={onCloseDrawer} />}
 			{createMode === "template" && (
 				<>
 					<Box m="2" mb="15">
@@ -312,7 +253,45 @@ const CreateProblem = ({ patient }) => {
 	)
 }
 
-function AddInfo({ onClick }) {
+const UpdateProblemFormWrapper = ({ patient, problemIndex }) => {
+	const { onCloseDrawer } = useDrawer()
+
+	const updateProblem = async (data) => {
+		await patient.atomicUpdate((oldData) => {
+			oldData.problems[problemIndex] = data
+			return oldData
+		})
+		onCloseDrawer()
+	}
+
+	return (
+		<ProblemForm
+			defaultValues={patient.problems[problemIndex]}
+			onSubmit={updateProblem}
+			onCancel={onCloseDrawer}
+		/>
+	)
+}
+
+const DeleteProblemDialogueWrapper = ({ patient, problemIndex }) => {
+	const { onCloseDrawer } = useDrawer()
+
+	return patient.problems[problemIndex] ? (
+		<DeleteDialogue
+			itemName={"Problem: " + patient.problems[problemIndex].problem}
+			onDelete={async () => {
+				await patient.atomicUpdate((oldData) => {
+					oldData.problems.splice(problemIndex, 1)
+					return oldData
+				})
+				onCloseDrawer()
+			}}
+			onCancel={onCloseDrawer}
+		/>
+	) : null
+}
+
+function CreateInfoButton({ onClick }) {
 	return (
 		<Box
 			as="button"
