@@ -1,7 +1,14 @@
 import { createRxDatabase, addRxPlugin } from "rxdb"
 import { getRxStorageLoki } from "rxdb/plugins/lokijs"
 import * as idb from "lokijs/src/incremental-indexeddb-adapter"
-import { patientSchema, templateSchema, workupSchema, medsSchema, labsSchema } from "./schema"
+import {
+	patientSchema,
+	templateSchema,
+	workupSchema,
+	medsSchema,
+	labsSchema,
+	logSchema,
+} from "./schema"
 import { RxDBReplicationGraphQLPlugin } from "rxdb/plugins/replication-graphql"
 
 addRxPlugin(RxDBReplicationGraphQLPlugin)
@@ -20,19 +27,12 @@ const _create = async () => {
 
 	// Create Collection
 	await db.addCollections({
-		patients: {
-			schema: patientSchema,
-		},
+		patients: { schema: patientSchema },
 		templates: { schema: templateSchema },
-		workups: {
-			schema: workupSchema,
-		},
-		meds: {
-			schema: medsSchema,
-		},
-		labs: {
-			schema: labsSchema,
-		},
+		logs: { schema: logSchema },
+		workups: { schema: workupSchema },
+		meds: { schema: medsSchema },
+		labs: { schema: labsSchema },
 	})
 
 	return db

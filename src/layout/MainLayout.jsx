@@ -58,6 +58,9 @@ const HamburgerMenu = ({ isOpen, onClose }) => {
 			<Drawer placement="left" isOpen={isOpen} onClose={onClose}>
 				<DrawerContent>
 					<DrawerBody ml="2" mt="3">
+						<Box as={Link} to="/" layerStyle="hamburgerMenuItem">
+							Home
+						</Box>
 						<Accordion allowToggle>
 							<AccordionItem>
 								<h2>

@@ -20,7 +20,7 @@ export default function ProblemUI({
 	onEditProblem,
 	onDeleteProblem,
 	onCreateInfo,
-	onEditInfo = (index) => {},
+	onUpdateInfo = (index) => {},
 	onDeleteInfo = (index) => {},
 }) {
 	const bind = useLongPress(onLongPress)
@@ -30,7 +30,7 @@ export default function ProblemUI({
 				<MedicationInfoUI
 					key={index}
 					data={content}
-					onEdit={() => onEditInfo(index)}
+					onEdit={() => onUpdateInfo(index)}
 					onDelete={() => onDeleteInfo(index)}
 				/>
 			),

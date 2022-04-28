@@ -109,6 +109,19 @@ export const templateSchema = {
 	},
 }
 
+export const logSchema = {
+	title: "logs",
+	description: "log data",
+	version: 0,
+	primaryKey: "_id",
+	type: "object",
+	properties: {
+		_id: { type: "string" },
+		summary: { type: "string" },
+		detailed: { type: "string" },
+	},
+}
+
 export const workupSchema = {
 	title: "workups",
 	description: "workup data",

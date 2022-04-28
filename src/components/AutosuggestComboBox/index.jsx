@@ -4,7 +4,14 @@ import { useDebounce } from "../../hooks/utility/useDebounce"
 import { getDB } from "../../db"
 import { Box, Flex, Input, UnorderedList } from "@chakra-ui/react"
 
-export const AutosuggestComboBox = ({ collection, fieldName = "name", onSelect, limit }) => {
+export const AutosuggestComboBox = ({
+	collection,
+	fieldName = "name",
+	placeholder,
+	onSelect,
+	limit,
+	...props
+}) => {
 	const [items, setItems] = useState([])
 
 	const {
@@ -41,12 +48,9 @@ export const AutosuggestComboBox = ({ collection, fieldName = "name", onSelect, 
 	)
 
 	return (
-		<Box position="relative">
+		<Box position="relative" {...props}>
 			<div {...getComboboxProps()}>
-				<Input
-					{...getInputProps()}
-					placeholder={fieldName[0].toUpperCase() + fieldName.substring(1)}
-				/>
+				<Input {...getInputProps()} placeholder={placeholder} />
 			</div>
 			<UnorderedList
 				{...getMenuProps()}

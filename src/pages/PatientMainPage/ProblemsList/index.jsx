@@ -28,6 +28,7 @@ import {
 } from "@chakra-ui/react"
 import { useCallback, useRef, useState } from "react"
 import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLongPressBox"
+import { LogInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LogInfoWrapper"
 
 function ProblemsList({ patient }) {
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
@@ -119,6 +120,7 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 	const InfoToComnponent = ({ category }, index) => {
 		const typeToComponent = {
 			Meds: <MedicationInfo key={index} infoIndex={index} forceUpdate={forceUpdate} />,
+			Logs: <LogInfoWrapper key={index} infoIndex={index} />,
 		}
 		return typeToComponent[category]
 	}

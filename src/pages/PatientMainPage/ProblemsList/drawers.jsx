@@ -1,6 +1,4 @@
-import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
 import { useDB } from "../../../components/Context Providers/DBContext"
-import { medsSchema } from "../../../schema"
 
 import {
 	ArrowDown,
@@ -14,7 +12,6 @@ import {
 } from "@carbon/icons-react"
 import {
 	Box,
-	Button,
 	Drawer,
 	DrawerBody,
 	DrawerCloseButton,
@@ -22,11 +19,11 @@ import {
 	DrawerHeader,
 	DrawerOverlay,
 	Flex,
-	Input,
 } from "@chakra-ui/react"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
 import { v4 as uuid } from "uuid"
+import { LogForm } from "../../../components/UI/Forms/LogForm"
+import { MedForm } from "../../../components/UI/Forms/MedForm"
 
 export const ProblemDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 	const { DB } = useDB()
@@ -101,8 +98,20 @@ export const AddInfoDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 	const [infoType, setInfoType] = useState()
 	const typeToComponent = {
 		Workup: <AddWorkup />,
-		Logs: <AddLog />,
-		Meds: <AddMed onClose={onClose} patient={patient} problemIndex={problemIndex} />,
+		Logs: (
+			<CreateLogInfoFormWrapper
+				patient={patient}
+				problemIndex={problemIndex}
+				onClose={onClose}
+			/>
+		),
+		Meds: (
+			<CreateMedInfoFormWrapper
+				patient={patient}
+				problemIndex={problemIndex}
+				onClose={onClose}
+			/>
+		),
 		Labs: <AddLab />,
 		Images: <AddImage />,
 	}
@@ -164,12 +173,20 @@ const AddWorkup = () => {
 	return <>Add Workup</>
 }
 
-const AddLog = () => {
-	return <>Add Log</>
+const CreateLogInfoFormWrapper = ({ patient, problemIndex, onClose }) => {
+	const onSubmit = async (data) => {
+		await patient.atomicUpdate((oldData) => {
+			const info = { category: "Logs", content: data }
+			oldData.problems[problemIndex].info.push(info)
+			return oldData
+		})
+		onClose()
+	}
+
+	return <LogForm onSubmit={onSubmit} onCancel={onClose} />
 }
 
-const AddMed = ({ onClose, patient, problemIndex }) => {
-	const { register, handleSubmit, reset } = useForm()
+const CreateMedInfoFormWrapper = ({ patient, problemIndex, onClose }) => {
 	const onSubmit = async (data) => {
 		await patient.atomicUpdate((oldData) => {
 			const info = { category: "Meds", content: data }
@@ -178,40 +195,7 @@ const AddMed = ({ onClose, patient, problemIndex }) => {
 		})
 	}
 
-	return (
-		<>
-			<Box mx="3">
-				<AutosuggestComboBox
-					schema={medsSchema}
-					onSelect={({ name, strength, dosage, form }) =>
-						reset({ name, strength, dosage, form })
-					}
-					limit={1}
-				/>
-				<form id="addMed" onSubmit={handleSubmit(onSubmit)}>
-					<Input {...register("name")} placeholder="Name" />
-					<Input {...register("strength")} placeholder="Strength" />
-					<Input {...register("form")} placeholder="Form" />
-					<Input {...register("usage")} placeholder="Usage" />
-				</form>
-			</Box>
-			<Flex>
-				<Button
-					type="submit"
-					form="addMed"
-					flex="1"
-					borderRadius="none"
-					p="0"
-					variant="primary"
-				>
-					Save
-				</Button>
-				<Button onClick={onClose} flex="1" borderRadius="none" bg="ui03" border="none">
-					Cancel
-				</Button>
-			</Flex>
-		</>
-	)
+	return <MedForm onSubmit={onSubmit} onCancel={onClose} />
 }
 
 const AddLab = () => {

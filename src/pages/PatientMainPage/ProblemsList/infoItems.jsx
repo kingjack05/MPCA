@@ -1,13 +1,11 @@
-import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
 import { usePatientContext } from "../../../components/Context Providers/PatientContext"
 import { useProblemContext } from "../../../components/Context Providers/ProblemContext"
 import { useDrawer } from "../../../components/Context Providers/DrawerContext"
 import SwipeEditBox from "../../../components/SwipeEditBox"
-import { medsSchema } from "../../../schema"
 
 import { Pills } from "@carbon/icons-react"
-import { Box, Button, Input, Flex, Text } from "@chakra-ui/react"
-import { useForm } from "react-hook-form"
+import { Box, Button, Flex, Text } from "@chakra-ui/react"
+import { MedForm } from "../../../components/UI/Forms/MedForm"
 
 export const MedicationInfo = ({ infoIndex, annotation, forceUpdate }) => {
 	const { patient } = usePatientContext()
@@ -19,7 +17,11 @@ export const MedicationInfo = ({ infoIndex, annotation, forceUpdate }) => {
 		onOpenDrawer()
 		setHeader("Edit Med")
 		setComponent(
-			<EditMed patient={patient} problemIndex={problemIndex} infoIndex={infoIndex} />
+			<UpdateMedFormWrapper
+				patient={patient}
+				problemIndex={problemIndex}
+				infoIndex={infoIndex}
+			/>
 		)
 	}
 
@@ -62,11 +64,9 @@ export const MedicationInfo = ({ infoIndex, annotation, forceUpdate }) => {
 	)
 }
 
-const EditMed = ({ patient, problemIndex, infoIndex }) => {
-	const { register, handleSubmit, reset } = useForm({
-		defaultValues: patient.problems[problemIndex].info[infoIndex].content,
-	})
+const UpdateMedFormWrapper = ({ patient, problemIndex, infoIndex }) => {
 	const { onCloseDrawer } = useDrawer()
+
 	const onSubmit = async (data) => {
 		await patient.atomicUpdate((oldData) => {
 			const info = { category: "Meds", content: data }
@@ -77,44 +77,11 @@ const EditMed = ({ patient, problemIndex, infoIndex }) => {
 	}
 
 	return (
-		<>
-			<Box mx="3">
-				<AutosuggestComboBox
-					schema={medsSchema}
-					onSelect={({ name, strength, dosage, form }) =>
-						reset({ name, strength, dosage, form })
-					}
-					limit={1}
-				/>
-				<form id="editMed" onSubmit={handleSubmit(onSubmit)}>
-					<Input {...register("name")} placeholder="Name" />
-					<Input {...register("strength")} placeholder="Strength" />
-					<Input {...register("form")} placeholder="Form" />
-					<Input {...register("usage")} placeholder="Usage" />
-				</form>
-			</Box>
-			<Flex>
-				<Button
-					type="submit"
-					form="editMed"
-					flex="1"
-					borderRadius="none"
-					p="0"
-					variant="primary"
-				>
-					Save
-				</Button>
-				<Button
-					onClick={onCloseDrawer}
-					flex="1"
-					borderRadius="none"
-					bg="ui03"
-					border="none"
-				>
-					Cancel
-				</Button>
-			</Flex>
-		</>
+		<MedForm
+			defaultValues={patient.problems[problemIndex].info[infoIndex].content}
+			onSubmit={onSubmit}
+			onCancel={onCloseDrawer}
+		/>
 	)
 }
 

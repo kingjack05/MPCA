@@ -7,6 +7,7 @@ import Menu from "./menu"
 import Select from "./select"
 import Table from "./table"
 import Tabs from "./tabs"
+import Textarea from "./textarea"
 
 const Components = {
 	Accordion,
@@ -18,6 +19,7 @@ const Components = {
 	Select,
 	Table,
 	Tabs,
+	Textarea,
 }
 
 export default Components
