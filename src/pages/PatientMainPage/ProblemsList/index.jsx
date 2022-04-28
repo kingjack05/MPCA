@@ -5,7 +5,6 @@ import { ProblemContext } from "../../../components/Context Providers/ProblemCon
 
 // Component
 import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
-import SwipeEditBox from "../../../components/SwipeEditBox"
 import { ProblemForm } from "../../../components/UI/Forms/ProblemForm"
 import StatusIndicator from "../../../components/UI/StatusIndicator"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
@@ -28,7 +27,7 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react"
 import { useCallback, useRef, useState } from "react"
-import { useLongPress } from "use-long-press"
+import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLongPressBox"
 
 function ProblemsList({ patient }) {
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
@@ -110,7 +109,6 @@ function ProblemsList({ patient }) {
 }
 
 function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDrawer }) {
-	const bind = useLongPress(onLongPress)
 	const { patient } = usePatientContext()
 	const problem = patient?.problems[problemIndex]
 	const [, updateState] = useState()
@@ -127,12 +125,17 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 
 	return (
 		<ProblemContext problemIndex={problemIndex}>
-			<SwipeEditBox onEdit={onEdit} onDelete={onDelete} w="100%">
+			<SwipeEditAndLongPressBox
+				onEdit={onEdit}
+				onDelete={onDelete}
+				onLongPress={onLongPress}
+				w="100%"
+				borderRadius="base"
+			>
 				<Accordion defaultIndex={[0]} allowMultiple>
 					<AccordionItem>
 						<h2>
 							<AccordionButton
-								{...bind}
 								bg="white"
 								borderRadius="0.5"
 								py="1"
@@ -162,7 +165,7 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 						</AccordionPanel>
 					</AccordionItem>
 				</Accordion>
-			</SwipeEditBox>
+			</SwipeEditAndLongPressBox>
 		</ProblemContext>
 	)
 }
