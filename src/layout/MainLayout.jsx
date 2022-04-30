@@ -78,6 +78,9 @@ const HamburgerMenu = ({ isOpen, onClose }) => {
 									<Box as={Link} to="db/meds" layerStyle="hamburgerMenuItem">
 										Meds
 									</Box>
+									<Box as={Link} to="db/labs" layerStyle="hamburgerMenuItem">
+										Labs
+									</Box>
 								</AccordionPanel>
 							</AccordionItem>
 						</Accordion>

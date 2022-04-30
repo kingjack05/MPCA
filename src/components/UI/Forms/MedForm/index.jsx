@@ -10,7 +10,7 @@ export const MedForm = ({ defaultValues, onSubmit, onCancel }) => {
 
 	return (
 		<>
-			<Box mx="3">
+			<Box mx="3" mb="3">
 				<AutosuggestComboBox
 					collection="meds"
 					placeholder="Import from database..."
@@ -18,6 +18,7 @@ export const MedForm = ({ defaultValues, onSubmit, onCancel }) => {
 						reset({ name, strength, form, usage })
 					}
 					limit={5}
+					mb="2"
 				/>
 				<form id="editMed" onSubmit={handleSubmit(onSubmit)}>
 					<Input {...register("name")} placeholder="Name" />

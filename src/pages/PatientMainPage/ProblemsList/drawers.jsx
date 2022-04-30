@@ -121,7 +121,7 @@ export const AddInfoDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 			<DrawerOverlay />
 			<DrawerContent>
 				<DrawerCloseButton />
-				<DrawerHeader>Add {infoType ? infoType : "Info"}</DrawerHeader>
+				<DrawerHeader pb="1">Add {infoType ? infoType : "Info"}</DrawerHeader>
 				<DrawerBody>
 					<InfoTypeRadioGroup infoType={infoType} setInfoType={setInfoType} />
 					{typeToComponent[infoType]}
@@ -149,7 +149,7 @@ const InfoTypeRadioGroup = ({ infoType, setInfoType }) => {
 	}
 
 	return (
-		<Flex pl="2">
+		<Flex px="2" mb="1" justify="space-around">
 			<Box {...getIconButtonProps("Workup")}>
 				<LicenseDraft size={32} />
 			</Box>

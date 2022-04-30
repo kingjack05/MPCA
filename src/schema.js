@@ -170,7 +170,7 @@ export const labsSchema = {
 		_id: { type: "string" },
 		name: { type: "string" },
 		unit: { type: "string" },
-		min: { type: "number" },
-		max: { type: "number" },
+		min: { type: "string" },
+		max: { type: "string" },
 	},
 }

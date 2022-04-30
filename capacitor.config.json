@@ -1,0 +1,6 @@
+{
+  "appId": "com.lall_0419.mpca",
+  "appName": "My Primary Care Assistant",
+  "webDir": "build",
+  "bundledWebRuntime": false
+}

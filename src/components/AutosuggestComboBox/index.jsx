@@ -10,6 +10,7 @@ export const AutosuggestComboBox = ({
 	placeholder,
 	onSelect,
 	limit,
+	otherInputProps,
 	...props
 }) => {
 	const [items, setItems] = useState([])
@@ -31,7 +32,7 @@ export const AutosuggestComboBox = ({
 	useDebounce(
 		async () => {
 			const value = inputValue
-			if (value.length <= 2) return
+			if (value.length <= 1) return
 			const regexp = new RegExp(`\\b${value}`, "i")
 			const DB = await getDB()
 			const search = { [fieldName]: { $regex: regexp } }
@@ -50,7 +51,7 @@ export const AutosuggestComboBox = ({
 	return (
 		<Box position="relative" {...props}>
 			<div {...getComboboxProps()}>
-				<Input {...getInputProps()} placeholder={placeholder} />
+				<Input {...getInputProps({ ...otherInputProps })} placeholder={placeholder} />
 			</div>
 			<UnorderedList
 				{...getMenuProps()}

@@ -15,6 +15,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { MainLayout } from "./layout/MainLayout"
 import { TemplatesDB } from "./pages/DB/TemplatesDB"
 import { Auth0Provider } from "@auth0/auth0-react"
+import { defineCustomElements } from "@ionic/pwa-elements/loader"
+import { LabsDB } from "./pages/DB/LabsDB"
 
 const container = document.getElementById("root")
 const root = createRoot(container)
@@ -34,6 +36,7 @@ root.render(
 								<Route element={<MainLayout />}>
 									<Route path="/" element={<App />} />
 									<Route path="db">
+										<Route path="labs" element={<LabsDB />} />
 										<Route path="templates" element={<TemplatesDB />} />
 										<Route path="meds" element={<MedsDB />} />
 									</Route>
@@ -53,3 +56,5 @@ root.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 serviceWorkerRegistration.register()
+
+defineCustomElements(window)
