@@ -1,6 +1,7 @@
 import { AutosuggestComboBox } from "../../../AutosuggestComboBox"
+import { ReactComponent as Exchange } from "../../../CustomIcons/Icon_ Exchange.svg"
 
-import { Box, Button, Input, Flex, FormErrorMessage } from "@chakra-ui/react"
+import { Box, Button, Input, Flex } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 
 export const LabForm = ({ defaultValues, onSubmit, onCancel }) => {
@@ -19,18 +20,29 @@ export const LabForm = ({ defaultValues, onSubmit, onCancel }) => {
 
 	return (
 		<>
-			<Box mx="3" mb="3">
+			<Box mx="3" mb="2">
 				<form id="Lab" onSubmit={handleSubmit(onSubmit, onError)}>
 					<AutosuggestComboBox
 						collection="labs"
-						placeholder="Import from database..."
-						otherInputProps={{ ...register("name") }}
+						placeholder="Lab name (or import from database...)"
+						otherInputProps={{ ...register("name", { required: true }) }}
 						onSelect={({ unit }) => reset({ unit })}
 						limit={3}
 						mb="2"
 					/>
-					<Input {...register("unit", { required: true })} placeholder="unit" mb="1" />
-					{errors.name && <FormErrorMessage>Name is required</FormErrorMessage>}
+					{errors.name && <Box color="error">Lab Name is required</Box>}
+					<Flex alignItems="center" mb="1">
+						<Input {...register("value")} placeholder="value" />
+						<Input
+							{...register("unit")}
+							bg="transparent"
+							ml="2"
+							mr="1"
+							height="4"
+							placeholder="unit"
+						/>
+						<Exchange style={{ flexShrink: "0", width: "26px", height: "26px" }} />
+					</Flex>
 				</form>
 			</Box>
 			<Flex>

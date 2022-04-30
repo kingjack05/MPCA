@@ -9,7 +9,11 @@ export const SwipeEditAndLongPressBox = ({ children, onEdit, onDelete, onLongPre
 		onEdit,
 		onDelete,
 	})
-	const bind = useLongPress(isSwiping ? null : onLongPress)
+	const bind = useLongPress(isSwiping ? null : onLongPress, {
+		onStart: (event) => event.stopPropagation(),
+		captureEvent: true,
+		cancelOnMovement: true,
+	})
 
 	return (
 		<Box position="relative" bg={bg} overflowX="visible" zIndex="0" {...props} {...bind}>
