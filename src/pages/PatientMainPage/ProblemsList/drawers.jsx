@@ -24,6 +24,7 @@ import { useState } from "react"
 import { v4 as uuid } from "uuid"
 import { LogForm } from "../../../components/UI/Forms/LogForm"
 import { MedForm } from "../../../components/UI/Forms/MedForm"
+import { LabForm } from "../../../components/UI/Forms/LabForm"
 
 export const ProblemDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 	const { DB } = useDB()
@@ -97,7 +98,13 @@ export const ProblemDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 export const AddInfoDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 	const [infoType, setInfoType] = useState()
 	const typeToComponent = {
-		Workup: <AddWorkup />,
+		Workup: (
+			<CreateWorkupFormWrapper
+				patient={patient}
+				problemIndex={problemIndex}
+				onClose={onClose}
+			/>
+		),
 		Logs: (
 			<CreateLogInfoFormWrapper
 				patient={patient}
@@ -112,8 +119,20 @@ export const AddInfoDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 				onClose={onClose}
 			/>
 		),
-		Labs: <AddLab />,
-		Images: <AddImage />,
+		Labs: (
+			<CreateLabInfoFormWrapper
+				patient={patient}
+				problemIndex={problemIndex}
+				onClose={onClose}
+			/>
+		),
+		Images: (
+			<CreateImageFormWrapper
+				patient={patient}
+				problemIndex={problemIndex}
+				onClose={onClose}
+			/>
+		),
 	}
 
 	return (
@@ -169,7 +188,7 @@ const InfoTypeRadioGroup = ({ infoType, setInfoType }) => {
 	)
 }
 
-const AddWorkup = () => {
+const CreateWorkupFormWrapper = ({ patient, problemIndex, onClose }) => {
 	return <>Add Workup</>
 }
 
@@ -193,15 +212,25 @@ const CreateMedInfoFormWrapper = ({ patient, problemIndex, onClose }) => {
 			oldData.problems[problemIndex].info.push(info)
 			return oldData
 		})
+		onClose()
 	}
 
 	return <MedForm onSubmit={onSubmit} onCancel={onClose} />
 }
 
-const AddLab = () => {
-	return <>Add Lab</>
+const CreateLabInfoFormWrapper = ({ patient, problemIndex, onClose }) => {
+	const onSubmit = async (data) => {
+		await patient.atomicUpdate((oldData) => {
+			const info = { category: "Labs", content: data }
+			oldData.problems[problemIndex].info.push(info)
+			return oldData
+		})
+		onClose()
+	}
+
+	return <LabForm onSubmit={onSubmit} onCancel={onClose} />
 }
 
-const AddImage = () => {
+const CreateImageFormWrapper = ({ patient, problemIndex, onClose }) => {
 	return <>Add Image</>
 }

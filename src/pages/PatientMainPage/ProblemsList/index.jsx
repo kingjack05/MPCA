@@ -29,6 +29,7 @@ import {
 import { useCallback, useRef, useState } from "react"
 import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLongPressBox"
 import { LogInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LogInfoWrapper"
+import { LabInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LabInfoWrapper"
 
 function ProblemsList({ patient }) {
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
@@ -121,6 +122,7 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 		const typeToComponent = {
 			Meds: <MedicationInfo key={index} infoIndex={index} forceUpdate={forceUpdate} />,
 			Logs: <LogInfoWrapper key={index} infoIndex={index} />,
+			Labs: <LabInfoWrapper key={index} infoIndex={index} />,
 		}
 		return typeToComponent[category]
 	}
