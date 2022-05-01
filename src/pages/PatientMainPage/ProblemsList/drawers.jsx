@@ -25,6 +25,7 @@ import { v4 as uuid } from "uuid"
 import { LogForm } from "../../../components/UI/Forms/LogForm"
 import { MedForm } from "../../../components/UI/Forms/MedForm"
 import { LabForm } from "../../../components/UI/Forms/LabForm"
+import { WorkupForm } from "../../../components/UI/Forms/WorkupForm"
 
 export const ProblemDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 	const { DB } = useDB()
@@ -189,7 +190,16 @@ const InfoTypeRadioGroup = ({ infoType, setInfoType }) => {
 }
 
 const CreateWorkupFormWrapper = ({ patient, problemIndex, onClose }) => {
-	return <>Add Workup</>
+	const onSubmit = async (data) => {
+		await patient.atomicUpdate((oldData) => {
+			const info = { category: "Workups", content: data }
+			oldData.problems[problemIndex].info.push(info)
+			return oldData
+		})
+		onClose()
+	}
+
+	return <WorkupForm onSubmit={onSubmit} onCancel={onClose} />
 }
 
 const CreateLogInfoFormWrapper = ({ patient, problemIndex, onClose }) => {

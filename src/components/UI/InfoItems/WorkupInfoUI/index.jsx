@@ -27,10 +27,10 @@ export const WorkupInfoUI = ({ data }) => {
 			{data.questions.map((question) => {
 				return (
 					<>
-						<Box pl="3" textStyle="tertiaryText">
+						<Box pl="3" textStyle="tertiaryText" mt="1">
 							{question.question}&nbsp;
 						</Box>
-						<Box textStyle="label1" color="mainTheme" pl="3">
+						<Box textStyle="label1" color="mainTheme" mb="1" pl="3">
 							{question.answer}&nbsp;
 						</Box>
 					</>

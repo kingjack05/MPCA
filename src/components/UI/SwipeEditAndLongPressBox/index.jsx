@@ -1,10 +1,18 @@
 import { useSwipeEdit } from "../../SwipeEditBox/useSwipeEdit"
+import { useDoubleTap } from "../../../hooks/useDoubleTap"
 
 import { Edit, TrashCan } from "@carbon/icons-react"
 import { Box } from "@chakra-ui/react"
 import { useLongPress } from "use-long-press"
 
-export const SwipeEditAndLongPressBox = ({ children, onEdit, onDelete, onLongPress, ...props }) => {
+export const SwipeEditAndLongPressBox = ({
+	children,
+	onEdit,
+	onDelete,
+	onLongPress,
+	onDoubleTap,
+	...props
+}) => {
 	const { isSwiping, deltaX, bg, handlers } = useSwipeEdit({
 		onEdit,
 		onDelete,
@@ -14,9 +22,19 @@ export const SwipeEditAndLongPressBox = ({ children, onEdit, onDelete, onLongPre
 		captureEvent: true,
 		cancelOnMovement: true,
 	})
+	const bindDoubleTap = useDoubleTap(onDoubleTap)
 
 	return (
-		<Box position="relative" bg={bg} overflowX="visible" zIndex="0" {...props} {...bind}>
+		<Box
+			position="relative"
+			bg={bg}
+			overflowX="visible"
+			zIndex="0"
+			style={{ touchAction: "manipulation" }}
+			{...props}
+			{...bind}
+			{...bindDoubleTap}
+		>
 			<Box
 				{...handlers}
 				transform={`translateX(${deltaX}px)`}
