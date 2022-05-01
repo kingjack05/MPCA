@@ -31,6 +31,7 @@ import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLon
 import { LogInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LogInfoWrapper"
 import { LabInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LabInfoWrapper"
 import { WorkupInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/WorkupInfoWrapper"
+import { ImageInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/ImageInfoWrapper"
 
 function ProblemsList({ patient }) {
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
@@ -125,6 +126,7 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 			Logs: <LogInfoWrapper key={index} infoIndex={index} />,
 			Labs: <LabInfoWrapper key={index} infoIndex={index} />,
 			Workups: <WorkupInfoWrapper key={index} infoIndex={index} />,
+			Images: <ImageInfoWrapper key={index} infoIndex={index} />,
 		}
 		return typeToComponent[category]
 	}

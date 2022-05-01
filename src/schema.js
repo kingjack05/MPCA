@@ -174,3 +174,16 @@ export const labsSchema = {
 		max: { type: "string" },
 	},
 }
+
+export const imagesSchema = {
+	title: "images",
+	description: "images data",
+	version: 0,
+	primaryKey: "_id",
+	type: "object",
+	properties: {
+		_id: { type: "string" },
+		name: { type: "string" },
+		summary: { type: "string" },
+	},
+}

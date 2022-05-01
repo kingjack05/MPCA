@@ -1,6 +1,6 @@
 import { AutosuggestComboBox } from "../../../AutosuggestComboBox"
 
-import { Box, Button, Input, Flex, Textarea, FormErrorMessage } from "@chakra-ui/react"
+import { Box, Button, Flex, Textarea, FormErrorMessage } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 
 export const LogForm = ({ defaultValues, onSubmit, onCancel }) => {
@@ -15,18 +15,14 @@ export const LogForm = ({ defaultValues, onSubmit, onCancel }) => {
 	return (
 		<>
 			<Box mx="3" mb="3">
-				<AutosuggestComboBox
-					collection="logs"
-					fieldName="summary"
-					placeholder="Import from database..."
-					onSelect={({ summary, detailed }) => reset({ summary, detailed })}
-					limit={3}
-					mb="2"
-				/>
 				<form id="Log" onSubmit={handleSubmit(onSubmit)}>
-					<Input
-						{...register("summary", { required: true })}
-						placeholder="Summary"
+					<AutosuggestComboBox
+						collection="logs"
+						fieldName="summary"
+						otherInputProps={{ ...register("summary", { required: true }) }}
+						placeholder="Summary (or import from database...)"
+						onSelect={({ detailed }) => reset({ detailed })}
+						limit={3}
 						mb="1"
 					/>
 					{errors.summary && <FormErrorMessage>Summary is required</FormErrorMessage>}

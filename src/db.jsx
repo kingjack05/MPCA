@@ -8,6 +8,7 @@ import {
 	medsSchema,
 	labsSchema,
 	logSchema,
+	imagesSchema,
 } from "./schema"
 import { RxDBReplicationGraphQLPlugin } from "rxdb/plugins/replication-graphql"
 
@@ -33,6 +34,7 @@ const _create = async () => {
 		workups: { schema: workupSchema },
 		meds: { schema: medsSchema },
 		labs: { schema: labsSchema },
+		images: { schema: imagesSchema },
 	})
 
 	return db

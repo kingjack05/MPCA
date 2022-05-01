@@ -26,6 +26,7 @@ import { LogForm } from "../../../components/UI/Forms/LogForm"
 import { MedForm } from "../../../components/UI/Forms/MedForm"
 import { LabForm } from "../../../components/UI/Forms/LabForm"
 import { WorkupForm } from "../../../components/UI/Forms/WorkupForm"
+import { ImageForm } from "../../../components/UI/Forms/ImageForm"
 
 export const ProblemDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 	const { DB } = useDB()
@@ -242,5 +243,14 @@ const CreateLabInfoFormWrapper = ({ patient, problemIndex, onClose }) => {
 }
 
 const CreateImageFormWrapper = ({ patient, problemIndex, onClose }) => {
-	return <>Add Image</>
+	const onSubmit = async (data) => {
+		await patient.atomicUpdate((oldData) => {
+			const info = { category: "Images", content: data }
+			oldData.problems[problemIndex].info.push(info)
+			return oldData
+		})
+		onClose()
+	}
+
+	return <ImageForm onSubmit={onSubmit} onCancel={onClose} />
 }

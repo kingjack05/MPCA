@@ -24,16 +24,16 @@ export const WorkupInfoUI = ({ data }) => {
 			<Box textStyle="label1" pl="3">
 				{data.summary}
 			</Box>
-			{data.questions.map((question) => {
+			{data.questions.map((question, index) => {
 				return (
-					<>
+					<Box key={index}>
 						<Box pl="3" textStyle="tertiaryText" mt="1">
 							{question.question}&nbsp;
 						</Box>
 						<Box textStyle="label1" color="mainTheme" mb="1" pl="3">
 							{question.answer}&nbsp;
 						</Box>
-					</>
+					</Box>
 				)
 			})}
 			<Box textStyle="label1" pl="3" fontStyle="italic" fontWeight="light">
