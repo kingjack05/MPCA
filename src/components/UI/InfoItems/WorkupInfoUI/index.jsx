@@ -1,14 +1,14 @@
-import { Edit, Image, TrashCan } from "@carbon/icons-react"
+import { Edit, LicenseDraft, TrashCan } from "@carbon/icons-react"
 import { Box, Flex, Show } from "@chakra-ui/react"
 
-export const ImageInfoUI = ({ data }) => {
+export const WorkupInfoUI = ({ data }) => {
 	return data ? (
 		<Flex direction="column" bg="ui01" py="1">
 			<Box pl="3" textStyle="tertiaryText">
 				{data.time}&nbsp;
 			</Box>
 			<Flex lineHeight="1">
-				<Image size={16} />
+				<LicenseDraft size={16} />
 				<Box flex="1" h="2" pl="1" textStyle="label1Semi">
 					{data.name}&nbsp;
 				</Box>
@@ -24,6 +24,18 @@ export const ImageInfoUI = ({ data }) => {
 			<Box textStyle="label1" pl="3">
 				{data.summary}
 			</Box>
+			{data.questions.map((question) => {
+				return (
+					<>
+						<Box pl="3" textStyle="tertiaryText">
+							{question.question}&nbsp;
+						</Box>
+						<Box textStyle="label1" color="mainTheme" pl="3">
+							{question.answer}&nbsp;
+						</Box>
+					</>
+				)
+			})}
 			<Box textStyle="label1" pl="3" fontStyle="italic" fontWeight="light">
 				{data.annotation}
 			</Box>

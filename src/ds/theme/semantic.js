@@ -8,6 +8,7 @@ export const semanticTokens = {
 		field01: "gray.100",
 		interactive01: "blue.600",
 		hoverui: "gray.100hover",
+		text01: "gray.1000",
 		text02: "gray.700",
 		text03: "gray.400",
 		text05: "gray.600",

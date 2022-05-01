@@ -78,9 +78,52 @@ const baseStyle = (props) => ({
 	divider: baseStyleDivider,
 })
 
+const variantCarbon = {
+	list: {
+		bg: "ui01",
+		boxShadow: "sm",
+		py: "0",
+		minW: "200px",
+		zIndex: 1,
+		borderRadius: "none",
+	},
+	item: {
+		h: "5",
+		px: "2",
+		border: "none",
+		transitionProperty: "background",
+		transitionDuration: "ultra-fast",
+		transitionTimingFunction: "ease-in",
+		bg: "transparent",
+		color: "text02",
+		textStyle: "bodyShort1",
+		_hover: {
+			color: "text01",
+			bg: "ui03",
+		},
+		_focus: {
+			color: "text01",
+			bg: "ui03",
+		},
+		_active: {
+			color: "text01",
+			bg: "ui03",
+		},
+		_disabled: {
+			opacity: 0.4,
+			cursor: "not-allowed",
+		},
+	},
+}
+
+const variants = {
+	carbon: variantCarbon,
+}
+
 const menu = {
 	parts: parts.keys,
 	baseStyle,
+	variants,
 }
 
 export default menu
