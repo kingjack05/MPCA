@@ -11,7 +11,7 @@ export const PatientForm = ({ defaultValues = { name: "", summary: "" }, onSubmi
 	return (
 		<>
 			<Box mx="3" mb="3">
-				<form id="patient" onSubmit={handleSubmit(onSubmit)}>
+				<form id="patient" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
 					<Input {...register("name", { required: true })} placeholder="Name" />
 					<Text>{errors.name ? "Name is required." : " "}</Text>
 					<Textarea mt="2" {...register("summary")} placeholder="Summary" />

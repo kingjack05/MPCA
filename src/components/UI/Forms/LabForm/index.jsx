@@ -21,7 +21,7 @@ export const LabForm = ({ defaultValues, onSubmit, onCancel }) => {
 	return (
 		<>
 			<Box mx="3" mb="2">
-				<form id="Lab" onSubmit={handleSubmit(onSubmit, onError)}>
+				<form id="Lab" onSubmit={handleSubmit(onSubmit, onError)} autoComplete="off">
 					<AutosuggestComboBox
 						collection="labs"
 						placeholder="Lab name (or import from database...)"

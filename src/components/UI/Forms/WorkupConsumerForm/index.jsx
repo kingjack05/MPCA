@@ -12,7 +12,7 @@ export const WorkupConsumerForm = ({ defaultValues, onSubmit, onCancel }) => {
 	return (
 		<>
 			<Box mx="3" mb="2">
-				<form id="WorkupConsumer" onSubmit={handleSubmit(onSubmit)}>
+				<form id="WorkupConsumer" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
 					{fields.map((item, index) => {
 						if (item.category === "Yes/No") {
 							return (

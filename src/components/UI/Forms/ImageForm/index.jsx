@@ -16,7 +16,7 @@ export const ImageForm = ({ defaultValues, onSubmit, onCancel }) => {
 	return (
 		<>
 			<Box mx="3" mb="2">
-				<form id="Lab" onSubmit={handleSubmit(onSubmit)}>
+				<form id="Lab" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
 					<AutosuggestComboBox
 						collection="images"
 						placeholder="Image name (or import from database...)"

@@ -19,7 +19,7 @@ export const WorkupForm = ({ defaultValues, onSubmit, onCancel }) => {
 	return (
 		<>
 			<Box mx="3" mb="2">
-				<form id="Workup" onSubmit={handleSubmit(onSubmit)}>
+				<form id="Workup" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
 					<AutosuggestComboBox
 						collection="workups"
 						placeholder="Workup name (or import from database...)"

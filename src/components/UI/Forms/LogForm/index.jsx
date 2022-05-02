@@ -15,7 +15,7 @@ export const LogForm = ({ defaultValues, onSubmit, onCancel }) => {
 	return (
 		<>
 			<Box mx="3" mb="3">
-				<form id="Log" onSubmit={handleSubmit(onSubmit)}>
+				<form id="Log" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
 					<AutosuggestComboBox
 						collection="logs"
 						fieldName="summary"
