@@ -1,3 +1,5 @@
+import { AutosuggestComboBox } from "../../../AutosuggestComboBox"
+
 import {
 	Box,
 	Button,
@@ -18,18 +20,24 @@ export const ProblemForm = ({ defaultValues, onSubmit, onCancel }) => {
 		handleSubmit,
 		formState: { errors },
 		control,
+		reset,
 	} = useForm({ defaultValues })
 	return (
 		<>
 			<Box mx="3" mb="3">
 				<form id="problem" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-					<Input
-						{...register("problem", { required: true })}
-						placeholder="Problem"
-						mb="4"
+					<AutosuggestComboBox
+						collection="templates"
+						fieldName="problem"
+						otherInputProps={{ ...register("problem", { required: true }) }}
+						placeholder="Problem name (or import from database...)"
+						onSelect={({ status, goal }) => reset({ status, goal })}
+						limit={3}
+						mb="2"
 					/>
 					<Text>{errors.problem ? "Problem is required." : " "}</Text>
 					<StatusRadioGroup control={control} />
+					<Input {...register("goal")} placeholder="Goal" mt="2" />
 				</form>
 			</Box>
 

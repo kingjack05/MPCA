@@ -4,7 +4,6 @@ import { usePatientContext } from "../../../components/Context Providers/Patient
 import { ProblemContext } from "../../../components/Context Providers/ProblemContext"
 
 // Component
-import { AutosuggestComboBox } from "../../../components/AutosuggestComboBox"
 import { ProblemForm } from "../../../components/UI/Forms/ProblemForm"
 import StatusIndicator from "../../../components/UI/StatusIndicator"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
@@ -18,15 +17,11 @@ import {
 	AccordionItem,
 	AccordionPanel,
 	Box,
-	Button,
 	Flex,
-	Radio,
-	RadioGroup,
-	Stack,
 	VStack,
 	useDisclosure,
 } from "@chakra-ui/react"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useState } from "react"
 import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLongPressBox"
 import { LogInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LogInfoWrapper"
 import { LabInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LabInfoWrapper"
@@ -155,7 +150,7 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 										<Flex direction="column">
 											<Box textStyle="h2">{problem.problem}</Box>
 											<Box textStyle="label1" color="gray.700">
-												Last log
+												Goal: {problem.goal}
 											</Box>
 										</Flex>
 									</Flex>
@@ -196,8 +191,6 @@ function CreateProblemButton({ onClick }) {
 
 const CreateProblemFormWrapper = ({ patient }) => {
 	const { onCloseDrawer } = useDrawer()
-	const [createMode, setCreateMode] = useState("new")
-	const templateRef = useRef()
 
 	const addProblem = async (data) => {
 		await patient.atomicUpdate((oldData) => {
@@ -208,60 +201,7 @@ const CreateProblemFormWrapper = ({ patient }) => {
 		onCloseDrawer()
 	}
 
-	return (
-		<>
-			<RadioGroup onChange={setCreateMode} value={createMode} px="3" mb="2">
-				<Stack direction="row">
-					<Radio value="new" size="sm">
-						New
-					</Radio>
-					<Radio value="template" size="sm">
-						Load From Template
-					</Radio>
-				</Stack>
-			</RadioGroup>
-			{createMode === "new" && <ProblemForm onSubmit={addProblem} onCancel={onCloseDrawer} />}
-			{createMode === "template" && (
-				<>
-					<Box m="2" mb="15">
-						<AutosuggestComboBox
-							collection="templates"
-							onSelect={(item) => {
-								const { problem, status, info } = item
-								const fromTemplate = { problem, status, info }
-								templateRef.current = fromTemplate
-							}}
-							limit={3}
-							fieldName="problem"
-						/>
-					</Box>
-					<Flex>
-						<Button
-							onClick={async () => {
-								console.log(templateRef.current)
-								await addProblem(templateRef.current)
-							}}
-							flex="1"
-							borderRadius="none"
-							p="0"
-							variant="primary"
-						>
-							Confirm
-						</Button>
-						<Button
-							onClick={onCloseDrawer}
-							flex="1"
-							borderRadius="none"
-							bg="ui03"
-							border="none"
-						>
-							Cancel
-						</Button>
-					</Flex>
-				</>
-			)}
-		</>
-	)
+	return <ProblemForm onSubmit={addProblem} onCancel={onCloseDrawer} />
 }
 
 const UpdateProblemFormWrapper = ({ patient, problemIndex }) => {

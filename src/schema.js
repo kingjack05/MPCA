@@ -18,6 +18,7 @@ export const patientSchema = {
 				properties: {
 					problem: { type: "string" },
 					status: { type: "string" },
+					goal: { type: "string" },
 					info: {
 						type: "array",
 						items: {
@@ -96,6 +97,7 @@ export const templateSchema = {
 		_id: { type: "string" },
 		problem: { type: "string" },
 		status: { type: "string" },
+		goal: { type: "string" },
 		info: {
 			type: "array",
 			items: {
