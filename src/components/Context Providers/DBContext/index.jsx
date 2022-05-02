@@ -113,6 +113,92 @@ export const DBContext = ({ children }) => {
 			patientsReplicationState.error$.subscribe((error) => {
 				console.dir(error)
 			})
+
+			const medsPullQueryBuilder = (doc) => {
+				if (!doc) {
+					doc = {
+						_id: "",
+						updated_at: new Date(0).toUTCString(),
+					}
+				}
+				const { updated_at } = doc
+				const query = /* GraphQL */ `{
+					meds(where: {updated_at: {_gt: "${updated_at}"}}, 
+					         order_by: [{updated_at: asc}, {_id: asc}]) {
+					  _id
+					  name
+					  strength
+					  usage
+					  form
+					  updated_at
+					  deleted
+					}
+				  }`
+				return {
+					query,
+				}
+			}
+
+			const medsReplicationState = db.meds.syncGraphQL({
+				url: "https://blessed-ghoul-34.hasura.app/v1/graphql",
+				headers: {
+					Authorization: `Bearer ${JWT}`,
+				},
+				pull: {
+					queryBuilder: medsPullQueryBuilder,
+					batchSize: 5,
+				},
+				deletedFlag: "deleted",
+				live: true,
+			})
+
+			medsReplicationState.error$.subscribe((error) => {
+				console.log("Meds replication error!")
+				console.dir(error)
+			})
+
+			const labsPullQueryBuilder = (doc) => {
+				if (!doc) {
+					doc = {
+						_id: "",
+						updated_at: new Date(0).toUTCString(),
+					}
+				}
+				const { updated_at } = doc
+				const query = /* GraphQL */ `{
+					labs(where: {updated_at: {_gt: "${updated_at}"}}, 
+					         order_by: [{updated_at: asc}, {_id: asc}]) {
+					  _id
+					  name
+					  unit
+					  min
+					  max
+					  conversionEquivalence
+					  updated_at
+					  deleted
+					}
+				  }`
+				return {
+					query,
+				}
+			}
+			const labsReplicationState = db.labs.syncGraphQL({
+				url: "https://blessed-ghoul-34.hasura.app/v1/graphql",
+				headers: {
+					Authorization: `Bearer ${JWT}`,
+				},
+				pull: {
+					queryBuilder: labsPullQueryBuilder,
+					batchSize: 5,
+				},
+				deletedFlag: "deleted",
+				live: true,
+			})
+
+			labsReplicationState.error$.subscribe((error) => {
+				console.log("Labs replication error!")
+				console.dir(error)
+			})
 		}
 		loadDB()
 	}, [JWT])

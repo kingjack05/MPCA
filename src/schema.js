@@ -159,6 +159,10 @@ export const medsSchema = {
 		strength: { type: "string" },
 		usage: { type: "string" },
 		form: { type: "string" },
+		updated_at: {
+			type: "string",
+			format: "date-time",
+		},
 	},
 }
 
@@ -172,8 +176,13 @@ export const labsSchema = {
 		_id: { type: "string" },
 		name: { type: "string" },
 		unit: { type: "string" },
-		min: { type: "string" },
-		max: { type: "string" },
+		min: { type: "number" },
+		max: { type: "number" },
+		conversionEquivalence: { type: "number" },
+		updated_at: {
+			type: "string",
+			format: "date-time",
+		},
 	},
 }
 
