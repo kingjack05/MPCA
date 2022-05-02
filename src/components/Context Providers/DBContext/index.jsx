@@ -32,7 +32,7 @@ export const DBContext = ({ children }) => {
 
 			const patientsPushQueryBuilder = (doc) => {
 				console.log(doc)
-				const { _id, name, problems, logs, meds, labs } = doc
+				const { _id, name, problems, logs, meds, labs, _deleted } = doc
 				const data = { problems, logs, meds, labs }
 				const query = /* GraphQL */ `
 				mutation pushPatient ($data: jsonb) {
@@ -40,8 +40,8 @@ export const DBContext = ({ children }) => {
 						affected_rows
 					}
 					insert_patients(
-						objects: {_id: "${_id}", name: "${name}", data: $data, taken_care_by:{data:{}}}, 
-						on_conflict: {constraint: patients_pkey, update_columns: [name, data, updated_at]}) {
+						objects: {_id: "${_id}", name: "${name}", data: $data, taken_care_by:{data:{}}, deleted: "${_deleted}"}, 
+						on_conflict: {constraint: patients_pkey, update_columns: [name, data, updated_at, deleted]}) {
 							affected_rows
 					  }
 				  }
@@ -68,6 +68,7 @@ export const DBContext = ({ children }) => {
 					  data
 					  name
 					  updated_at
+					  deleted
 					}
 				  }`
 				return {
@@ -76,7 +77,7 @@ export const DBContext = ({ children }) => {
 			}
 
 			const patientsPullModifier = (doc) => {
-				const { _id, name, data, updated_at } = doc
+				const { _id, name, data, updated_at, deleted } = doc
 				const { problems, logs, meds, labs } = data
 				return {
 					_id,
@@ -86,6 +87,7 @@ export const DBContext = ({ children }) => {
 					meds,
 					labs,
 					updated_at,
+					deleted,
 				}
 			}
 
