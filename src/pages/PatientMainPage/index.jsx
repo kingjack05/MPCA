@@ -5,6 +5,7 @@ import { PatientContext } from "../../components/Context Providers/PatientContex
 import ProblemsList from "./ProblemsList"
 import { useNavigate, useParams } from "react-router-dom"
 import { usePatient } from "../../queries/usePatient"
+import { useDocumentTitle } from "../../hooks/useDocumentTitle"
 
 function PatientMainPage() {
 	const params = useParams()
@@ -46,6 +47,8 @@ function PatientMainPage() {
 
 function Header({ patient }) {
 	const navigate = useNavigate()
+	useDocumentTitle(patient?.name)
+
 	return (
 		<Box bgColor="gray.900">
 			<Flex
