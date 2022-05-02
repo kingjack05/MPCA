@@ -7,8 +7,10 @@ export const patientSchema = {
 	properties: {
 		_id: { type: "string" },
 		name: { type: "string" },
+		age: { type: "number" },
+		gender: { type: "string" },
 		summary: { type: "string" },
-		extraInfo: { type: "string" },
+		extraInfo: { type: "object" },
 		problems: {
 			type: "array",
 			default: [],

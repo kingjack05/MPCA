@@ -71,7 +71,7 @@ function Header({ patient }) {
 				<Flex direction="column" color="white">
 					<Box textStyle="h2">{patient?.name}</Box>
 					<Text textStyle="label1" my="1">
-						Extra info
+						{patient?.age ? patient?.age + " y/o " + patient?.gender : " "}
 					</Text>
 				</Flex>
 			</Flex>

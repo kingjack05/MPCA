@@ -13,8 +13,22 @@ export const PatientForm = ({ defaultValues = { name: "", summary: "" }, onSubmi
 			<Box mx="3" mb="3">
 				<form id="patient" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
 					<Input {...register("name", { required: true })} placeholder="Name" />
-					<Text>{errors.name ? "Name is required." : " "}</Text>
+					<Text color="error">{errors.name ? "Name is required." : " "}</Text>
 					<Textarea mt="2" {...register("summary")} placeholder="Summary" />
+					<Flex mt="2">
+						<Input
+							type="number"
+							{...register("age", {
+								required: true,
+								valueAsNumber: true,
+							})}
+							placeholder="Age"
+							mr="2"
+						/>
+						<Input {...register("gender", { required: true })} placeholder="Gender" />
+					</Flex>
+					<Text color="error">{errors.age ? "Age is required." : ""}</Text>
+					<Text color="error">{errors.gender ? "Gender is required." : ""}</Text>
 				</form>
 			</Box>
 			<Flex>
