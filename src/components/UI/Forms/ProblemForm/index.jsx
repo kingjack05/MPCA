@@ -31,7 +31,7 @@ export const ProblemForm = ({ defaultValues, onSubmit, onCancel }) => {
 						fieldName="problem"
 						otherInputProps={{ ...register("problem", { required: true }) }}
 						placeholder="Problem name (or import from database...)"
-						onSelect={({ status, goal }) => reset({ status, goal })}
+						onSelect={({ status, goal, info }) => reset({ status, goal, info })}
 						limit={3}
 						mt="1"
 						mb="2"
