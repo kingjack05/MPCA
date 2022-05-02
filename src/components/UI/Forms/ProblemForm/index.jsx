@@ -33,6 +33,7 @@ export const ProblemForm = ({ defaultValues, onSubmit, onCancel }) => {
 						placeholder="Problem name (or import from database...)"
 						onSelect={({ status, goal }) => reset({ status, goal })}
 						limit={3}
+						mt="1"
 						mb="2"
 					/>
 					<Text>{errors.problem ? "Problem is required." : " "}</Text>

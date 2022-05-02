@@ -111,6 +111,88 @@ export const DBContext = ({ children }) => {
 			})
 
 			patientsReplicationState.error$.subscribe((error) => {
+				console.log("Patients replication error!")
+				console.dir(error)
+			})
+
+			const templatesPushQueryBuilder = (doc) => {
+				const { _id, problem, status, goal, info, _deleted } = doc
+				const data = { info }
+				const query = /* GraphQL */ `
+				mutation pushPatient ($data: jsonb) {
+					insert_templates(
+						objects: {_id: "${_id}", problem: "${problem}", status: "${status}", goal: "${goal}", data: $data, deleted: "${_deleted}"}, 
+						on_conflict: {constraint: templates_pkey, update_columns: [problem, status, goal, data, updated_at, deleted]}) {
+							affected_rows
+					  }
+				  }
+			`
+				const variables = { data }
+				return {
+					query,
+					variables,
+				}
+			}
+
+			const templatesPullQueryBuilder = (doc) => {
+				if (!doc) {
+					doc = {
+						_id: "",
+						updated_at: new Date(0).toUTCString(),
+					}
+				}
+				const { updated_at } = doc
+				const query = /* GraphQL */ `{
+					templates(where: {updated_at: {_gt: "${updated_at}"}}, 
+					         order_by: [{updated_at: asc}, {_id: asc}]) {
+					  _id
+					  problem
+					  status
+					  goal
+					  data
+					  updated_at
+					  deleted
+					}
+				  }`
+				return {
+					query,
+				}
+			}
+
+			const templatesPullModifier = (doc) => {
+				const { _id, problem, status, goal, data, updated_at, deleted } = doc
+				const { info } = data
+				return {
+					_id,
+					problem,
+					status,
+					goal,
+					info,
+					updated_at,
+					deleted,
+				}
+			}
+
+			const templatesReplicationState = db.templates.syncGraphQL({
+				url: "https://blessed-ghoul-34.hasura.app/v1/graphql",
+				headers: {
+					Authorization: `Bearer ${JWT}`,
+				},
+				push: {
+					queryBuilder: templatesPushQueryBuilder,
+					batchSize: 5,
+				},
+				pull: {
+					queryBuilder: templatesPullQueryBuilder,
+					batchSize: 5,
+					modifier: templatesPullModifier,
+				},
+				deletedFlag: "deleted",
+				live: true,
+			})
+
+			templatesReplicationState.error$.subscribe((error) => {
+				console.log("Templates replication error!")
 				console.dir(error)
 			})
 

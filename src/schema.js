@@ -108,6 +108,10 @@ export const templateSchema = {
 				},
 			},
 		},
+		updated_at: {
+			type: "string",
+			format: "date-time",
+		},
 	},
 }
 
@@ -121,6 +125,10 @@ export const logSchema = {
 		_id: { type: "string" },
 		summary: { type: "string" },
 		detailed: { type: "string" },
+		updated_at: {
+			type: "string",
+			format: "date-time",
+		},
 	},
 }
 
@@ -143,6 +151,10 @@ export const workupSchema = {
 					category: { type: "string" },
 				},
 			},
+		},
+		updated_at: {
+			type: "string",
+			format: "date-time",
 		},
 	},
 }
@@ -196,5 +208,9 @@ export const imagesSchema = {
 		_id: { type: "string" },
 		name: { type: "string" },
 		summary: { type: "string" },
+		updated_at: {
+			type: "string",
+			format: "date-time",
+		},
 	},
 }
