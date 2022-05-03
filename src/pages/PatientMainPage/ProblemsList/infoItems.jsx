@@ -2,10 +2,11 @@ import { usePatientContext } from "../../../components/Context Providers/Patient
 import { useProblemContext } from "../../../components/Context Providers/ProblemContext"
 import { useDrawer } from "../../../components/Context Providers/DrawerContext"
 import SwipeEditBox from "../../../components/SwipeEditBox"
+import { MedForm } from "../../../components/UI/Forms/MedForm"
 
 import { Pills } from "@carbon/icons-react"
 import { Box, Button, Flex, Text } from "@chakra-ui/react"
-import { MedForm } from "../../../components/UI/Forms/MedForm"
+import { DateTime } from "luxon"
 
 export const MedicationInfo = ({ infoIndex, annotation, forceUpdate }) => {
 	const { patient } = usePatientContext()
@@ -42,7 +43,7 @@ export const MedicationInfo = ({ infoIndex, annotation, forceUpdate }) => {
 		<SwipeEditBox onEdit={onEdit} onDelete={onDelete} borderRadius="none">
 			<Flex direction="column" bg="ui01" py="1">
 				<Box pl="3" textStyle="tertiaryText">
-					{data?.time}&nbsp;
+					{DateTime.fromISO(data.time).toFormat("LL'/'dd HH':'mm")}&nbsp;
 				</Box>
 				<Flex lineHeight="1">
 					<Pills size={16} />

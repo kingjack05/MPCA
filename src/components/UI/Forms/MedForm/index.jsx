@@ -1,10 +1,15 @@
 import { AutosuggestComboBox } from "../../../AutosuggestComboBox"
+import { TimeDateInput } from "../../InputWidgets/TimeDateInput"
 
 import { Box, Button, Flex, Input } from "@chakra-ui/react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 
-export const MedForm = ({ defaultValues, onSubmit, onCancel }) => {
-	const { register, handleSubmit, reset } = useForm({
+export const MedForm = ({
+	defaultValues = { time: new Date().toISOString() },
+	onSubmit,
+	onCancel,
+}) => {
+	const { register, handleSubmit, reset, control } = useForm({
 		defaultValues,
 	})
 
@@ -23,6 +28,13 @@ export const MedForm = ({ defaultValues, onSubmit, onCancel }) => {
 					<Input {...register("strength")} placeholder="Strength" />
 					<Input {...register("form")} placeholder="Form" />
 					<Input {...register("usage")} placeholder="Usage" />
+					<Controller
+						control={control}
+						name="time"
+						render={({ field: { value, onChange } }) => (
+							<TimeDateInput value={value} onChange={onChange} />
+						)}
+					/>
 				</form>
 			</Box>
 			<Flex>

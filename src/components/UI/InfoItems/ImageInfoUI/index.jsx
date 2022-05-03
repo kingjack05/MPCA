@@ -1,11 +1,12 @@
 import { Edit, Image, TrashCan } from "@carbon/icons-react"
 import { Box, Flex, Show } from "@chakra-ui/react"
+import { DateTime } from "luxon"
 
 export const ImageInfoUI = ({ data }) => {
 	return data ? (
 		<Flex direction="column" bg="ui01" py="1">
 			<Box pl="3" textStyle="tertiaryText">
-				{data.time}&nbsp;
+				{DateTime.fromISO(data.time).toFormat("LL'/'dd HH':'mm")}&nbsp;
 			</Box>
 			<Flex lineHeight="1">
 				<Image size={16} />

@@ -1,15 +1,17 @@
+import SwipeEditBox from "../../../SwipeEditBox"
+
 import { Edit } from "@carbon/icons-react"
 import { TrashCan } from "@carbon/icons-react"
 import { Pills } from "@carbon/icons-react"
 import { Box, Flex, Show, Text } from "@chakra-ui/react"
-import SwipeEditBox from "../../../SwipeEditBox"
+import { DateTime } from "luxon"
 
 export default function MedicationInfoUI({ data, onEdit, onDelete }) {
 	return (
 		<SwipeEditBox onEdit={onEdit} onDelete={onDelete} borderRadius="none">
 			<Flex direction="column" bg="ui01" py="1">
 				<Box pl="3" textStyle="tertiaryText">
-					{data?.time}&nbsp;
+					{DateTime.fromISO(data.time).toFormat("LL'/'dd HH':'mm")}&nbsp;
 				</Box>
 				<Flex lineHeight="1">
 					<Pills size={16} />

@@ -126,6 +126,10 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 		return typeToComponent[category]
 	}
 
+	const sortedInfo = [...problem.info].sort(function (a, b) {
+		return a.time < b.time ? -1 : a.time > b.time ? 1 : 0
+	})
+
 	return (
 		<ProblemContext problemIndex={problemIndex}>
 			<SwipeEditAndLongPressBox
@@ -164,7 +168,7 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 									onOpenAddInfoDrawer()
 								}}
 							/>
-							{problem.info.map(InfoToComnponent)}
+							{sortedInfo.map(InfoToComnponent)}
 						</AccordionPanel>
 					</AccordionItem>
 				</Accordion>

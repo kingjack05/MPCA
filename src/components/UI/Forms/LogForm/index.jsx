@@ -1,14 +1,20 @@
 import { AutosuggestComboBox } from "../../../AutosuggestComboBox"
+import { TimeDateInput } from "../../InputWidgets/TimeDateInput"
 
 import { Box, Button, Flex, Textarea, FormErrorMessage } from "@chakra-ui/react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 
-export const LogForm = ({ defaultValues, onSubmit, onCancel }) => {
+export const LogForm = ({
+	defaultValues = { time: new Date().toISOString() },
+	onSubmit,
+	onCancel,
+}) => {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		reset,
+		control,
 	} = useForm({
 		defaultValues,
 	})
@@ -27,6 +33,13 @@ export const LogForm = ({ defaultValues, onSubmit, onCancel }) => {
 					/>
 					{errors.summary && <FormErrorMessage>Summary is required</FormErrorMessage>}
 					<Textarea {...register("detailed")} placeholder="Details" variant="carbon" />
+					<Controller
+						control={control}
+						name="time"
+						render={({ field: { value, onChange } }) => (
+							<TimeDateInput value={value} onChange={onChange} />
+						)}
+					/>
 				</form>
 			</Box>
 			<Flex>
