@@ -11,6 +11,13 @@ export const AutosuggestComboBox = ({
 	onSelect,
 	limit,
 	otherInputProps,
+	itemContainerProps = {
+		h: "5",
+		alignItems: "center",
+		borderTop: "1px solid #E0E0E0",
+		_hover: { background: "hoverui" },
+	},
+	itemRenderProp = (item, index) => <Box minW={["312px"]}>{item[fieldName]}</Box>,
 	...props
 }) => {
 	const [items, setItems] = useState([])
@@ -64,16 +71,8 @@ export const AutosuggestComboBox = ({
 			>
 				{isOpen &&
 					items.map((item, index) => (
-						<Flex
-							key={index}
-							{...getItemProps({ item, index })}
-							h="5"
-							alignItems="center"
-							borderTop="1px solid #E0E0E0"
-							_hover={{ background: "hoverui" }}
-							// _notLast={{ borderBottom: "1px solid #E0E0E0" }}
-						>
-							<Box minW={["312px"]}>{item[fieldName]}</Box>
+						<Flex key={index} {...getItemProps({ item, index, ...itemContainerProps })}>
+							{itemRenderProp(item, index)}
 						</Flex>
 					))}
 			</UnorderedList>

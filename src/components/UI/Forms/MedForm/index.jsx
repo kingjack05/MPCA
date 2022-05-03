@@ -21,6 +21,14 @@ export const MedForm = ({
 						collection="meds"
 						placeholder="Med name (or import from database...)"
 						otherInputProps={{ ...register("name", { required: true }) }}
+						itemRenderProp={(item, index) => (
+							<>
+								<Box>{item.name}&nbsp;</Box>
+								<Box textStyle="tertiaryText">
+									{item.strength}, {item.form}, {item.usage}
+								</Box>
+							</>
+						)}
 						onSelect={({ strength, form, usage }) => reset({ strength, form, usage })}
 						limit={5}
 						mb="2"

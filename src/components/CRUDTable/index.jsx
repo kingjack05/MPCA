@@ -40,7 +40,7 @@ function CRUDTable({ schema }) {
 	}, [schema.title])
 
 	const addData = async (data) => {
-		data = { ...data, _id: uuid() }
+		data = { ...data, _id: uuid(), updated_at: new Date().toISOString() }
 		dbref.current[schema.title].insert(data)
 	}
 
@@ -49,7 +49,7 @@ function CRUDTable({ schema }) {
 			<Table
 				columns={[
 					...Object.keys(schema.properties)
-						.filter((property) => property !== "_id")
+						.filter((property) => property !== "_id" && property !== "updated_at")
 						.map((property) => {
 							var columnObj = { Header: property, accessor: property }
 							return columnObj
@@ -77,6 +77,7 @@ const EditableCell = ({ value: initialValue = "", row: { index }, column: { id }
 		await data[index].update({
 			$set: {
 				[id]: value,
+				updated_at: new Date().toISOString(),
 			},
 		})
 	}
