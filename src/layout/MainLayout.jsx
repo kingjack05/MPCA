@@ -56,7 +56,7 @@ const HamburgerMenu = ({ isOpen, onClose }) => {
 	return (
 		<>
 			<Drawer placement="left" isOpen={isOpen} onClose={onClose}>
-				<DrawerContent>
+				<DrawerContent maxW="224px">
 					<DrawerBody ml="2" mt="3">
 						<Box as={Link} to="/" layerStyle="hamburgerMenuItem">
 							Home

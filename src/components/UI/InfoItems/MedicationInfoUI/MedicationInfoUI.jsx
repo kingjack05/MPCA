@@ -11,7 +11,7 @@ export default function MedicationInfoUI({ data, onEdit, onDelete }) {
 		<SwipeEditBox onEdit={onEdit} onDelete={onDelete} borderRadius="none">
 			<Flex direction="column" bg="ui01" py="1">
 				<Box pl="3" textStyle="tertiaryText">
-					{DateTime.fromISO(data.time).toFormat("LL'/'dd HH':'mm")}&nbsp;
+					{data.time ? DateTime.fromISO(data.time).toFormat("LL'/'dd HH':'mm") : ""}&nbsp;
 				</Box>
 				<Flex lineHeight="1">
 					<Pills size={16} />

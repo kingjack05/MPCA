@@ -6,7 +6,7 @@ export const ImageInfoUI = ({ data }) => {
 	return data ? (
 		<Flex direction="column" bg="ui01" py="1">
 			<Box pl="3" textStyle="tertiaryText">
-				{DateTime.fromISO(data.time).toFormat("LL'/'dd HH':'mm")}&nbsp;
+				{data.time ? DateTime.fromISO(data.time).toFormat("LL'/'dd HH':'mm") : ""}&nbsp;
 			</Box>
 			<Flex lineHeight="1">
 				<Image size={16} />

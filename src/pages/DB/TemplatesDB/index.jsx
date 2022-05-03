@@ -6,9 +6,12 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { Box, Flex } from "@chakra-ui/react"
 import { getDB } from "../../../db"
 import { SearchBar } from "../../../components/UI/SearchBar/SearchBar"
+import { useDrawer } from "../../../components/Context Providers/DrawerContext"
+import { DeleteDialogue } from "../../../components/UI/Dialogues/DeleteDialogue"
 
 export const TemplatesDB = () => {
 	const setPageName = useUpdateAtom(pageNameAtom)
+	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
 	const DBRef = useRef()
 	const [templates, setTemplates] = useState([])
 	const [search, setSearch] = useState("")
@@ -55,13 +58,35 @@ export const TemplatesDB = () => {
 				<div key={index}>
 					<ProblemUI
 						data={template}
+						onDeleteProblem={() => {
+							onOpenDrawer()
+							setHeader("Delete Template")
+							setComponent(<DeleteTemplateDialogueWrapper template={template} />)
+						}}
 						onCreateInfo={() => {
 							console.log("Clicked")
 						}}
 					/>
-					<div> {JSON.stringify(template)})</div>
+					{/* <div> {JSON.stringify(template)})</div> */}
 				</div>
 			))}
 		</Box>
 	)
+}
+
+const DeleteTemplateDialogueWrapper = ({ template }) => {
+	const { onCloseDrawer } = useDrawer()
+
+	const onDelete = async () => {
+		await template.remove()
+		onCloseDrawer()
+	}
+
+	return template ? (
+		<DeleteDialogue
+			itemName={"Template: " + template.problem}
+			onDelete={onDelete}
+			onCancel={onCloseDrawer}
+		/>
+	) : null
 }

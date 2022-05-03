@@ -57,6 +57,14 @@ export const ProblemDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 							as="button"
 							onClick={async () => {
 								const data = { ...patient.problems[problemIndex], _id: uuid() }
+								data.info = data.info.map(({ category, content }) => {
+									let filteredContent = { ...content }
+									delete filteredContent.time
+									return {
+										category,
+										content: filteredContent,
+									}
+								})
 								await DB.templates.insert(data)
 								onClose()
 							}}
