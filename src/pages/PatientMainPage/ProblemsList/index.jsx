@@ -116,7 +116,7 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 	}, [])
 
 	const sortedInfo = [...problem.info].sort(function (a, b) {
-		return a.content.time < b.content.time ? -1 : a.content.time > b.content.time ? 1 : 0
+		return a.content.time < b.content.time ? 1 : a.content.time > b.content.time ? -1 : 0
 	})
 
 	const InfoToComnponent = ({ category, content: { time } }, index) => {
