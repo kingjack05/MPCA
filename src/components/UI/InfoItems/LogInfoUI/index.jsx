@@ -23,7 +23,7 @@ export const LogInfoUI = ({ data }) => {
 					</Box>
 				</Show>
 			</Flex>
-			<Box textStyle="label1" pl="3">
+			<Box textStyle="label1" pl="3" whiteSpace="pre-wrap">
 				{data?.detailed}
 			</Box>
 			<Box textStyle="label1" pl="3" fontStyle="italic" fontWeight="light">

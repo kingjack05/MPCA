@@ -23,7 +23,7 @@ export const ImageInfoUI = ({ data }) => {
 					</Box>
 				</Show>
 			</Flex>
-			<Box textStyle="label1" pl="3">
+			<Box textStyle="label1" pl="3" whiteSpace="pre-wrap">
 				{data.summary}
 			</Box>
 			<Box textStyle="label1" pl="3" fontStyle="italic" fontWeight="light">
