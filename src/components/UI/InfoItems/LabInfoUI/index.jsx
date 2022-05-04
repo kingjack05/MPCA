@@ -16,7 +16,7 @@ export const LabInfoUI = ({ data }) => {
 						{data.name}&nbsp;
 					</Text>
 					<Text textStyle="tertiaryText" display="inline" color="text05">
-						({data.unit})
+						{data.unit ? "(" + data.unit + ")" : ""}
 					</Text>
 				</Box>
 				<Box>
