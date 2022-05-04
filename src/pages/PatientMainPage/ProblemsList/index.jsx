@@ -115,20 +115,20 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 		updateState({})
 	}, [])
 
-	const InfoToComnponent = ({ category }, index) => {
+	const sortedInfo = [...problem.info].sort(function (a, b) {
+		return a.content.time < b.content.time ? -1 : a.content.time > b.content.time ? 1 : 0
+	})
+
+	const InfoToComnponent = ({ category, content: { time } }, index) => {
 		const typeToComponent = {
-			Meds: <MedicationInfo key={index} infoIndex={index} forceUpdate={forceUpdate} />,
-			Logs: <LogInfoWrapper key={index} infoIndex={index} />,
-			Labs: <LabInfoWrapper key={index} infoIndex={index} />,
-			Workups: <WorkupInfoWrapper key={index} infoIndex={index} />,
-			Images: <ImageInfoWrapper key={index} infoIndex={index} />,
+			Meds: <MedicationInfo key={index} time={time} forceUpdate={forceUpdate} />,
+			Logs: <LogInfoWrapper key={index} time={time} />,
+			Labs: <LabInfoWrapper key={index} time={time} />,
+			Workups: <WorkupInfoWrapper key={index} time={time} />,
+			Images: <ImageInfoWrapper key={index} time={time} />,
 		}
 		return typeToComponent[category]
 	}
-
-	const sortedInfo = [...problem.info].sort(function (a, b) {
-		return a.time < b.time ? -1 : a.time > b.time ? 1 : 0
-	})
 
 	return (
 		<ProblemContext problemIndex={problemIndex}>

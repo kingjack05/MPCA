@@ -6,11 +6,14 @@ import { ImageForm } from "../../../../../../components/UI/Forms/ImageForm"
 import { ImageInfoUI } from "../../../../../../components/UI/InfoItems/ImageInfoUI"
 import { SwipeEditAndLongPressBox } from "../../../../../../components/UI/SwipeEditAndLongPressBox"
 
-export const ImageInfoWrapper = ({ infoIndex }) => {
+export const ImageInfoWrapper = ({ time }) => {
 	const { patient } = usePatientContext()
 	const { problemIndex } = useProblemContext()
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
 
+	const infoIndex = patient.problems[problemIndex].info.findIndex(
+		(element) => element.content.time === time
+	)
 	const data = patient.problems[problemIndex].info[infoIndex]?.content
 
 	return data ? (

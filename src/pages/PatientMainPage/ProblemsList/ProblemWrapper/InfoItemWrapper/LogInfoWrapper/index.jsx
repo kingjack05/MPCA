@@ -6,11 +6,14 @@ import { LogForm } from "../../../../../../components/UI/Forms/LogForm"
 import { LogInfoUI } from "../../../../../../components/UI/InfoItems/LogInfoUI"
 import { SwipeEditAndLongPressBox } from "../../../../../../components/UI/SwipeEditAndLongPressBox"
 
-export const LogInfoWrapper = ({ infoIndex }) => {
+export const LogInfoWrapper = ({ time }) => {
 	const { patient } = usePatientContext()
 	const { problemIndex } = useProblemContext()
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
 
+	const infoIndex = patient.problems[problemIndex].info.findIndex(
+		(element) => element.content.time === time
+	)
 	const data = patient.problems[problemIndex].info[infoIndex]?.content
 
 	return data ? (

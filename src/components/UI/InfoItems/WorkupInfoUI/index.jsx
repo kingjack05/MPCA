@@ -1,12 +1,13 @@
+import { readableTimeString } from "../../../../misc/utils"
+
 import { Edit, LicenseDraft, TrashCan } from "@carbon/icons-react"
 import { Box, Flex, Show } from "@chakra-ui/react"
-import { DateTime } from "luxon"
 
 export const WorkupInfoUI = ({ data }) => {
 	return data ? (
 		<Flex direction="column" bg="ui01" py="1">
 			<Box pl="3" textStyle="tertiaryText">
-				{data.time ? DateTime.fromISO(data.time).toFormat("LL'/'dd HH':'mm") : ""}&nbsp;
+				{data.time ? readableTimeString(data.time) : ""}&nbsp;
 			</Box>
 			<Flex lineHeight="1">
 				<LicenseDraft size={16} />

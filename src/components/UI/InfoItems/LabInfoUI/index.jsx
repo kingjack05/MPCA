@@ -1,12 +1,13 @@
+import { readableTimeString } from "../../../../misc/utils"
+
 import { Chemistry, Edit, TrashCan } from "@carbon/icons-react"
 import { Box, Flex, Show, Text } from "@chakra-ui/react"
-import { DateTime } from "luxon"
 
 export const LabInfoUI = ({ data }) => {
 	return data ? (
 		<Flex direction="column" bg="ui01" py="1">
 			<Box pl="3" textStyle="tertiaryText">
-				{data.time ? DateTime.fromISO(data.time).toFormat("LL'/'dd HH':'mm") : ""}&nbsp;
+				{data.time ? readableTimeString(data.time) : ""}&nbsp;
 			</Box>
 			<Flex lineHeight="1">
 				<Chemistry size={16} />

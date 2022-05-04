@@ -8,10 +8,14 @@ import { Pills } from "@carbon/icons-react"
 import { Box, Button, Flex, Text } from "@chakra-ui/react"
 import { DateTime } from "luxon"
 
-export const MedicationInfo = ({ infoIndex, annotation, forceUpdate }) => {
+export const MedicationInfo = ({ time, annotation, forceUpdate }) => {
 	const { patient } = usePatientContext()
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
 	const { problemIndex } = useProblemContext()
+
+	const infoIndex = patient.problems[problemIndex].info.findIndex(
+		(element) => element.content.time === time
+	)
 	const data = patient.problems[problemIndex].info[infoIndex]?.content
 
 	const onEdit = () => {

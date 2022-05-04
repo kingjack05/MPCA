@@ -7,11 +7,14 @@ import { WorkupConsumerForm } from "../../../../../../components/UI/Forms/Workup
 import { WorkupInfoUI } from "../../../../../../components/UI/InfoItems/WorkupInfoUI"
 import { DeleteDialogue } from "../../../../../../components/UI/Dialogues/DeleteDialogue"
 
-export const WorkupInfoWrapper = ({ infoIndex }) => {
+export const WorkupInfoWrapper = ({ time }) => {
 	const { patient } = usePatientContext()
 	const { problemIndex } = useProblemContext()
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
 
+	const infoIndex = patient.problems[problemIndex].info.findIndex(
+		(element) => element.content.time === time
+	)
 	const data = patient.problems[problemIndex].info[infoIndex]?.content
 
 	return data ? (
