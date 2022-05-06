@@ -4,6 +4,8 @@ import { TimeDateInput } from "../../InputWidgets/TimeDateInput"
 import { ChevronDownIcon, CloseIcon } from "@chakra-ui/icons"
 import { Box, Button, Input, Flex, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react"
 import { Controller, useForm, useFieldArray } from "react-hook-form"
+import { useState } from "react"
+import { TipTapEditor } from "../../InputWidgets/TipTapEditor"
 
 export const WorkupForm = ({
 	defaultValues = { time: new Date().toISOString() },
@@ -75,6 +77,10 @@ export const WorkupForm = ({
 										<CloseIcon w="1.5" h="1.5" />
 									</Box>
 								</Flex>
+								<AnnotationFieldController
+									control={control}
+									name={`questions.${index}.annotation`}
+								/>
 							</Flex>
 						</Box>
 					))}
@@ -102,6 +108,32 @@ export const WorkupForm = ({
 					Cancel
 				</Button>
 			</Flex>
+		</>
+	)
+}
+
+const AnnotationFieldController = ({ control, name }) => {
+	const [annotateToggle, setAnnotateToggle] = useState(false)
+	return (
+		<>
+			<Box
+				onClick={() => {
+					setAnnotateToggle((prev) => !prev)
+				}}
+				color="gray.700"
+				fontStyle="italic"
+			>
+				Annotate...
+			</Box>
+			{annotateToggle && (
+				<Controller
+					control={control}
+					name={name}
+					render={({ field: { value, onChange } }) => (
+						<TipTapEditor value={value} onChange={onChange} />
+					)}
+				/>
+			)}
 		</>
 	)
 }

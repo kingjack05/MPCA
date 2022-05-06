@@ -134,6 +134,20 @@ export const logSchema = {
 	},
 }
 
+/**
+ * @typedef Workup
+ * @property {string} _id
+ * @property {string} name Workup name
+ * @property {Question[]} questions
+ *
+ * @typedef Question
+ * @property {string} question Content of the question
+ * @property {QuestionCategory} category
+ * @property {{}} annotation
+ *
+ * @typedef {"Text" | "Yes/No"} QuestionCategory
+ */
+
 export const workupSchema = {
 	title: "workups",
 	description: "workup data",

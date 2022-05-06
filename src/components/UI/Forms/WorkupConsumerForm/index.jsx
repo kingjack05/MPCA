@@ -1,14 +1,23 @@
 import { Box, Button, Input, Flex } from "@chakra-ui/react"
 import { useState, useEffect } from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
+import { TipTapRenderer } from "../../InputWidgets/TipTapEditor"
 
+/**
+ * @typedef Props
+ * @property {import("../../../../schema").Workup} defaultValues
+ * @property {(data)=>{}} onSubmit
+ * @property {()=>{}} onCancel
+ *
+ * @param {Props}
+ * @returns
+ */
 export const WorkupConsumerForm = ({ defaultValues, onSubmit, onCancel }) => {
 	const { control, register, handleSubmit } = useForm({ defaultValues })
 	const { fields } = useFieldArray({
 		control, // control props comes from useForm
 		name: "questions",
 	})
-
 	return (
 		<>
 			<Box mx="3" mb="2">
@@ -16,17 +25,24 @@ export const WorkupConsumerForm = ({ defaultValues, onSubmit, onCancel }) => {
 					{fields.map((item, index) => {
 						if (item.category === "Yes/No") {
 							return (
-								<Flex key={item.id} alignItems="center" mb="2">
-									<Box flex="1" mr="2" textStyle="bodyShort1">
-										{item.question}
-									</Box>
-									<Controller
-										control={control}
-										name={`questions.${index}.answer`}
-										render={({ field: { onChange, value } }) => (
-											<YesNoRadio value={value} onChange={onChange} />
-										)}
-									/>
+								<Flex direction="column" key={item.id}>
+									<Flex alignItems="center" mb="2">
+										<Box flex="1" mr="2" textStyle="bodyShort1">
+											{item.question}
+										</Box>
+										<Controller
+											control={control}
+											name={`questions.${index}.answer`}
+											render={({ field: { onChange, value } }) => (
+												<YesNoRadio value={value} onChange={onChange} />
+											)}
+										/>
+									</Flex>
+									{item.annotation && (
+										<>
+											<TipTapRenderer content={item.annotation} />
+										</>
+									)}
 								</Flex>
 							)
 						} else if (item.category === "Text") {
@@ -39,6 +55,11 @@ export const WorkupConsumerForm = ({ defaultValues, onSubmit, onCancel }) => {
 										variant="carbon"
 										{...register(`questions.${index}.answer`)}
 									/>
+									{item.annotation && (
+										<>
+											<TipTapRenderer content={item.annotation} />
+										</>
+									)}
 								</Flex>
 							)
 						} else return null

@@ -1,0 +1,31 @@
+.ProseMirror {
+	border-bottom: 1px solid #8d8d8d;
+	min-height: 72px;
+}
+
+.ProseMirror p {
+	font-size: 14px;
+	line-height: 18px;
+	letter-spacing: 0.16px;
+}
+
+.ProseMirror > * + * {
+	margin-top: 0.75em;
+}
+
+.ProseMirror .ProseMirror-selectednode {
+	outline: 3px solid #68cef8;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+	color: #adb5bd;
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+}
+
+[contenteditable="false"] {
+	min-height: fit-content;
+	border-bottom: none;
+}
