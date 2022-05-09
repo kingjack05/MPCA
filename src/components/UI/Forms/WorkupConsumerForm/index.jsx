@@ -18,6 +18,7 @@ export const WorkupConsumerForm = ({ defaultValues, onSubmit, onCancel }) => {
 		control, // control props comes from useForm
 		name: "questions",
 	})
+	console.dir(defaultValues)
 	return (
 		<>
 			<Box mx="3" mb="2">
@@ -59,6 +60,30 @@ export const WorkupConsumerForm = ({ defaultValues, onSubmit, onCancel }) => {
 										<>
 											<TipTapRenderer content={item.annotation} />
 										</>
+									)}
+								</Flex>
+							)
+						} else if (item.category === "Single Select") {
+							return (
+								<Flex direction="column" key={item.id}>
+									<Flex alignItems="center" mb="2">
+										<Box flex="1" textStyle="bodyShort1">
+											{item.question}
+										</Box>
+										<Controller
+											control={control}
+											name={`questions.${index}.answer`}
+											render={({ field: { onChange, value } }) => (
+												<SingleSelect
+													value={value}
+													onChange={onChange}
+													options={item.options}
+												/>
+											)}
+										/>
+									</Flex>
+									{item.annotation && (
+										<TipTapRenderer content={item.annotation} />
 									)}
 								</Flex>
 							)
@@ -121,5 +146,47 @@ const YesNoRadio = ({ value, onChange }) => {
 				No
 			</Flex>
 		</>
+	)
+}
+
+const SingleSelect = ({ value, onChange, options }) => {
+	const [answer, setAnswer] = useState(value)
+
+	useEffect(() => {
+		onChange(answer)
+	}, [answer, onChange])
+
+	const propGetter = (isActive) => {
+		const bg = isActive ? "interactive01" : "ui01"
+		const color = isActive ? "white" : "text01"
+
+		return {
+			bg,
+			color,
+			alignItems: "center",
+			justifyContent: "center",
+			h: "5",
+			w: "100%",
+			border: "none",
+			borderBottom: "1px solid #E0E0E0",
+			borderRadius: "none",
+			_last: {
+				borderBottom: "1px solid transparent",
+			},
+		}
+	}
+
+	return (
+		<Flex direction="column" flex="1">
+			{options.map((item, index) => (
+				<Flex
+					key={index}
+					onClick={() => setAnswer(item.optionValue)}
+					{...propGetter(answer === item.optionValue)}
+				>
+					{item.optionValue}
+				</Flex>
+			))}
+		</Flex>
 	)
 }

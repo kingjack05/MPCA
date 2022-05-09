@@ -145,7 +145,7 @@ export const logSchema = {
  * @property {QuestionCategory} category
  * @property {{}} annotation
  *
- * @typedef {"Text" | "Yes/No"} QuestionCategory
+ * @typedef {"Text" | "Yes/No" | "Single Select" | "Multiple Select"} QuestionCategory
  */
 
 export const workupSchema = {

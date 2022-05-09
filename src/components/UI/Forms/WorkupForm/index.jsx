@@ -2,7 +2,19 @@ import { AutosuggestComboBox } from "../../../AutosuggestComboBox"
 import { TimeDateInput } from "../../InputWidgets/TimeDateInput"
 
 import { ChevronDownIcon, CloseIcon } from "@chakra-ui/icons"
-import { Box, Button, Input, Flex, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react"
+import {
+	Box,
+	Button,
+	Input,
+	Flex,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuItem,
+	UnorderedList,
+	ListItem,
+	Show,
+} from "@chakra-ui/react"
 import { Controller, useForm, useFieldArray } from "react-hook-form"
 import { useState } from "react"
 import { TipTapEditor } from "../../InputWidgets/TipTapEditor"
@@ -22,6 +34,42 @@ export const WorkupForm = ({
 		control, // control props comes from useForm
 		name: "questions",
 	})
+
+	const questionsForm = (item, index) => (
+		<Box key={item.id}>
+			<Flex direction="column" mb="1">
+				<Flex textStyle="label1">
+					<Box flex="1">Question {index + 1}</Box>
+					<Box>({item.category})</Box>
+				</Flex>
+				<Flex>
+					<Input flex="1" {...register(`questions.${index}.question`)} />
+					<Box
+						as="button"
+						border="none"
+						bg="transparent"
+						px="14px"
+						onClick={() => remove(index)}
+					>
+						<CloseIcon w="1.5" h="1.5" />
+					</Box>
+				</Flex>
+				<Show above="sm">
+					<AnnotationFieldController
+						control={control}
+						name={`questions.${index}.annotation`}
+					/>
+				</Show>
+				{(item.category === "Single Select" || item.category === "Multiple Select") && (
+					<OptionsFieldArray
+						control={control}
+						register={register}
+						questionIndex={index}
+					/>
+				)}
+			</Flex>
+		</Box>
+	)
 
 	return (
 		<>
@@ -56,34 +104,27 @@ export const WorkupForm = ({
 							<MenuItem onClick={() => append({ question: "", category: "Yes/No" })}>
 								Yes/No
 							</MenuItem>
+							<MenuItem
+								onClick={() =>
+									append({ question: "", category: "Single Select", options: [] })
+								}
+							>
+								Single Select
+							</MenuItem>
+							<MenuItem
+								onClick={() =>
+									append({
+										question: "",
+										category: "Multiple Select",
+										options: [],
+									})
+								}
+							>
+								Multiple Select
+							</MenuItem>
 						</MenuList>
 					</Menu>
-					{fields.map((item, index) => (
-						<Box key={item.id}>
-							<Flex direction="column">
-								<Flex textStyle="label1" mb="1">
-									<Box flex="1">Question {index + 1}</Box>
-									<Box>({item.category})</Box>
-								</Flex>
-								<Flex>
-									<Input flex="1" {...register(`questions.${index}.question`)} />
-									<Box
-										as="button"
-										border="none"
-										bg="transparent"
-										px="14px"
-										onClick={() => remove(index)}
-									>
-										<CloseIcon w="1.5" h="1.5" />
-									</Box>
-								</Flex>
-								<AnnotationFieldController
-									control={control}
-									name={`questions.${index}.annotation`}
-								/>
-							</Flex>
-						</Box>
-					))}
+					{fields.map(questionsForm)}
 					<Controller
 						control={control}
 						name="time"
@@ -135,5 +176,57 @@ const AnnotationFieldController = ({ control, name }) => {
 				/>
 			)}
 		</>
+	)
+}
+
+const OptionsFieldArray = ({ control, register, questionIndex }) => {
+	const { fields, remove, append } = useFieldArray({
+		control,
+		name: `questions.${questionIndex}.options`,
+	})
+	return (
+		<Flex direction="column" mt="1" pl="1">
+			<UnorderedList pl="0">
+				{fields.map((item, index) => (
+					<ListItem key={item.id} mb="1" color="gray.700">
+						<Flex>
+							<Input
+								{...register(
+									`questions.${questionIndex}.options.${index}.optionValue`
+								)}
+								color="gray.700"
+							/>
+							<Box
+								onClick={() => remove(index)}
+								as="button"
+								border="none"
+								bg="transparent"
+								px="14px"
+								flexShrink="0"
+							>
+								<CloseIcon w="1.5" h="1.5" color="gray.700" />
+							</Box>
+						</Flex>
+					</ListItem>
+				))}
+			</UnorderedList>
+			<Flex
+				onClick={() => {
+					append({ optionValue: "option" })
+				}}
+				bg="transparent"
+				h="5"
+				border="dashed"
+				borderRadius="none"
+				w="100%"
+				color="text02"
+				fontStyle="italic"
+				alignItems="center"
+				justifyContent="center"
+				_hover={{ color: "blue.600hover", shadow: "lg" }}
+			>
+				+ Add Option
+			</Flex>
+		</Flex>
 	)
 }
