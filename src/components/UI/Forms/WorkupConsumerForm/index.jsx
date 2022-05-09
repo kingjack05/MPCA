@@ -1,4 +1,4 @@
-import { Box, Button, Input, Flex } from "@chakra-ui/react"
+import { Box, Button, Input, Flex, CheckboxGroup, Checkbox } from "@chakra-ui/react"
 import { useState, useEffect } from "react"
 import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { TipTapRenderer } from "../../InputWidgets/TipTapEditor"
@@ -75,6 +75,30 @@ export const WorkupConsumerForm = ({ defaultValues, onSubmit, onCancel }) => {
 											name={`questions.${index}.answer`}
 											render={({ field: { onChange, value } }) => (
 												<SingleSelect
+													value={value}
+													onChange={onChange}
+													options={item.options}
+												/>
+											)}
+										/>
+									</Flex>
+									{item.annotation && (
+										<TipTapRenderer content={item.annotation} />
+									)}
+								</Flex>
+							)
+						} else if (item.category === "Multiple Select") {
+							return (
+								<Flex direction="column" key={item.id}>
+									<Flex alignItems="center" mb="2">
+										<Box flex="1" textStyle="bodyShort1">
+											{item.question}
+										</Box>
+										<Controller
+											control={control}
+											name={`questions.${index}.answer`}
+											render={({ field: { onChange, value } }) => (
+												<MultipleSelect
 													value={value}
 													onChange={onChange}
 													options={item.options}
@@ -187,6 +211,32 @@ const SingleSelect = ({ value, onChange, options }) => {
 					{item.optionValue}
 				</Flex>
 			))}
+		</Flex>
+	)
+}
+
+const MultipleSelect = ({ value, onChange, options }) => {
+	const [answer, setAnswer] = useState(value)
+
+	useEffect(() => {
+		onChange(answer)
+	}, [answer, onChange])
+
+	return (
+		<Flex direction="column" flex="1">
+			<CheckboxGroup value={answer} onChange={(data) => setAnswer(data)}>
+				{options.map((item, index) => (
+					<Flex key={index} alignItems="center" h="5" w="100%">
+						<Checkbox
+							value={item.optionValue}
+							color="text02"
+							_checked={{ color: "#161616" }}
+						>
+							{item.optionValue}
+						</Checkbox>
+					</Flex>
+				))}
+			</CheckboxGroup>
 		</Flex>
 	)
 }

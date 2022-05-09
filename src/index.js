@@ -5,7 +5,7 @@ import theme from "./ds/theme"
 import "./index.css"
 import MedsDB from "./pages/DB/MedsDB"
 import PatientMainPage from "./pages/PatientMainPage"
-import Test from "./pages/Test"
+// import Test from "./pages/Test"
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration"
 
 import { ChakraProvider } from "@chakra-ui/react"
@@ -42,7 +42,7 @@ root.render(
 									</Route>
 								</Route>
 								<Route path="/patient/:_id" element={<PatientMainPage />} />
-								<Route path="/test" element={<Test />} />
+								{/* <Route path="/test" element={<Test />} /> */}
 							</Routes>
 						</BrowserRouter>
 					</DrawerContext>
