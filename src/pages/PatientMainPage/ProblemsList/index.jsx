@@ -42,44 +42,78 @@ function ProblemsList({ patient }) {
 		onOpen: onOpenAddInfoDrawer,
 		onClose: onCloseAddInfoDrawer,
 	} = useDisclosure()
+
+	const activeProblems = patient?.problems
+		? patient.problems.slice(
+				0,
+				patient.problems.findIndex(
+					(item) => item.problem === "Underlying problems demarcation line"
+				)
+		  )
+		: []
+	const underlyingProblems = patient?.problems
+		? patient.problems.slice(
+				patient.problems.findIndex(
+					({ problem }) => problem === "Underlying problems demarcation line"
+				) + 1,
+				patient.problems.findIndex(
+					(item) => item.problem === "Subsided problems/past history demarcation line"
+				)
+		  )
+		: []
+	const subsidedProblems = patient?.problems
+		? patient.problems.slice(
+				patient.problems.findIndex(
+					({ problem }) => problem === "Subsided problems/past history demarcation line"
+				) + 1
+		  )
+		: []
+
+	const problemMapper = (orignialProblemIndexPadding) => (problem, index) => {
+		const originalProblemIndex = index + orignialProblemIndexPadding
+		return (
+			<Problem
+				problem={problem}
+				key={index}
+				problemIndex={originalProblemIndex}
+				onEdit={() => {
+					onOpenDrawer()
+					setHeader("Edit Problem")
+					setComponent(
+						<UpdateProblemFormWrapper
+							patient={patient}
+							problemIndex={originalProblemIndex}
+						/>
+					)
+				}}
+				onDelete={() => {
+					onOpenDrawer()
+					setHeader("Delete Problem")
+					setComponent(
+						<DeleteProblemDialogueWrapper
+							patient={patient}
+							problemIndex={originalProblemIndex}
+						/>
+					)
+				}}
+				onLongPress={() => {
+					setProblemIndex(originalProblemIndex)
+					onOpenProblemDrawer()
+				}}
+				onOpenAddInfoDrawer={() => {
+					setProblemIndex(originalProblemIndex)
+					onOpenAddInfoDrawer()
+				}}
+			/>
+		)
+	}
+
 	return (
 		<Box>
 			<Box textStyle="body2" my="1">
 				Active Problems
 			</Box>
 			<VStack>
-				{patient?.problems?.map((problem, index) => (
-					<Problem
-						problem={problem}
-						key={index}
-						problemIndex={index}
-						onEdit={() => {
-							onOpenDrawer()
-							setHeader("Edit Problem")
-							setComponent(
-								<UpdateProblemFormWrapper patient={patient} problemIndex={index} />
-							)
-						}}
-						onDelete={() => {
-							onOpenDrawer()
-							setHeader("Delete Problem")
-							setComponent(
-								<DeleteProblemDialogueWrapper
-									patient={patient}
-									problemIndex={index}
-								/>
-							)
-						}}
-						onLongPress={() => {
-							setProblemIndex(index)
-							onOpenProblemDrawer()
-						}}
-						onOpenAddInfoDrawer={() => {
-							setProblemIndex(index)
-							onOpenAddInfoDrawer()
-						}}
-					/>
-				))}
 				<CreateProblemButton
 					onClick={() => {
 						onOpenDrawer()
@@ -87,10 +121,20 @@ function ProblemsList({ patient }) {
 						setComponent(<CreateProblemFormWrapper patient={patient} />)
 					}}
 				/>
+				{activeProblems.map(problemMapper(0))}
 			</VStack>
 			<Box textStyle="body2" mt="2" mb="1">
 				Underlying Problems
 			</Box>
+			<VStack>{underlyingProblems.map(problemMapper(activeProblems.length + 1))}</VStack>
+			<Box textStyle="body2" mt="2" mb="1">
+				Subsided Problems (Past history)
+			</Box>
+			<VStack>
+				{subsidedProblems.map(
+					problemMapper(activeProblems.length + underlyingProblems.length + 2)
+				)}
+			</VStack>
 			<ProblemDrawer
 				isOpen={isOpenProblemDrawer}
 				onClose={onCloseProblemDrawer}
@@ -114,7 +158,6 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 	const forceUpdate = useCallback(() => {
 		updateState({})
 	}, [])
-
 	const sortedInfo = [...problem.info].sort(function (a, b) {
 		return a.content.time < b.content.time ? 1 : a.content.time > b.content.time ? -1 : 0
 	})
@@ -183,6 +226,7 @@ function CreateProblemButton({ onClick }) {
 			as="button"
 			onClick={onClick}
 			layerStyle="basicBox"
+			bg="ui01"
 			w="100%"
 			color="text02"
 			fontStyle="italic"
@@ -199,7 +243,7 @@ const CreateProblemFormWrapper = ({ patient }) => {
 	const addProblem = async (data) => {
 		await patient.atomicUpdate((oldData) => {
 			const problem = { info: [], ...data }
-			oldData.problems.push(problem)
+			oldData.problems.unshift(problem)
 			return oldData
 		})
 		onCloseDrawer()

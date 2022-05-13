@@ -47,7 +47,14 @@ function PatientList() {
 						<PatientBox
 							_id={_id}
 							name={name}
-							problem={problems[0]}
+							problem={
+								problems.filter(
+									({ problem }) =>
+										problem !== "Underlying problems demarcation line" &&
+										problem !==
+											"Subsided problems/past history demarcation line"
+								)[0]
+							}
 							key={_id}
 							summary={summary}
 							onEdit={() => {
@@ -150,7 +157,14 @@ const CreatePatientFormWrapper = () => {
 	}, [])
 
 	const createPatient = async (data) => {
-		data = { ...data, _id: uuid() }
+		data = {
+			...data,
+			_id: uuid(),
+			problems: [
+				{ problem: "Underlying problems demarcation line" },
+				{ problem: "Subsided problems/past history demarcation line" },
+			],
+		}
 		dbref.current.patients.insert(data)
 	}
 
