@@ -27,6 +27,10 @@ export const PatientForm = ({ defaultValues = { name: "", summary: "" }, onSubmi
 						/>
 						<Input {...register("gender", { required: true })} placeholder="Gender" />
 					</Flex>
+					<Flex mt="2">
+						<Input {...register("weight")} placeholder="Weight" mr="2" />
+						<Input {...register("height")} placeholder="Height" />
+					</Flex>
 					<Text color="error">{errors.age ? "Age is required." : ""}</Text>
 					<Text color="error">{errors.gender ? "Gender is required." : ""}</Text>
 				</form>

@@ -178,9 +178,11 @@ const UpdatePatientFormWrapper = ({ patient }) => {
 		patient.update({ $set: data })
 	}
 
+	const { name, summary, age, gender, weight, height } = patient
+
 	return (
 		<PatientForm
-			defaultValues={{ name: patient.name, summary: patient.summary }}
+			defaultValues={{ name, summary, age, gender, weight, height }}
 			onSubmit={updatePatient}
 			onCancel={onCloseDrawer}
 		/>

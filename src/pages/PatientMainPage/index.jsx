@@ -72,6 +72,7 @@ function Header({ patient }) {
 					<Box textStyle="h2">{patient?.name}</Box>
 					<Text textStyle="label1" my="1">
 						{patient?.age ? patient?.age + " y/o " + patient?.gender : " "}
+						{patient?.weight ? ", " + patient?.weight + ", " + patient?.height : ""}
 					</Text>
 				</Flex>
 			</Flex>

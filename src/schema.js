@@ -9,6 +9,8 @@ export const patientSchema = {
 		name: { type: "string" },
 		age: { type: "number" },
 		gender: { type: "string" },
+		height: { type: "string" },
+		weight: { type: "string" },
 		summary: { type: "string" },
 		extraInfo: { type: "object" },
 		problems: {
