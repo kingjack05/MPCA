@@ -1,4 +1,4 @@
-import MedicationInfoUI from "../InfoItems/MedicationInfoUI"
+import MedInfoUI from "../InfoItems/MedInfoUI/MedInfoUI"
 import StatusIndicator from "../StatusIndicator"
 import SwipeEditBox from "../../SwipeEditBox"
 
@@ -27,7 +27,7 @@ export default function ProblemUI({
 	const InfoToComnponent = ({ category, content }, index) => {
 		const typeToComponent = {
 			Meds: (
-				<MedicationInfoUI
+				<MedInfoUI
 					key={index}
 					data={content}
 					onEdit={() => onUpdateInfo(index)}

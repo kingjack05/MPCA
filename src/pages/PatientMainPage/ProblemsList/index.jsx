@@ -7,7 +7,6 @@ import { ProblemContext } from "../../../components/Context Providers/ProblemCon
 import { ProblemForm } from "../../../components/UI/Forms/ProblemForm"
 import StatusIndicator from "../../../components/UI/StatusIndicator"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
-import { MedicationInfo } from "./infoItems"
 import { DeleteDialogue } from "../../../components/UI/Dialogues/DeleteDialogue"
 
 import {
@@ -21,12 +20,13 @@ import {
 	VStack,
 	useDisclosure,
 } from "@chakra-ui/react"
-import { useCallback, useState } from "react"
+import { useState } from "react"
 import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLongPressBox"
 import { LogInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LogInfoWrapper"
 import { LabInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LabInfoWrapper"
 import { WorkupInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/WorkupInfoWrapper"
 import { ImageInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/ImageInfoWrapper"
+import { MedInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/MedInfoWrapper"
 
 function ProblemsList({ patient }) {
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
@@ -154,17 +154,13 @@ function ProblemsList({ patient }) {
 function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDrawer }) {
 	const { patient } = usePatientContext()
 	const problem = patient?.problems[problemIndex]
-	const [, updateState] = useState()
-	const forceUpdate = useCallback(() => {
-		updateState({})
-	}, [])
 	const sortedInfo = [...problem.info].sort(function (a, b) {
 		return a.content.time < b.content.time ? 1 : a.content.time > b.content.time ? -1 : 0
 	})
 
 	const InfoToComnponent = ({ category, content: { time } }, index) => {
 		const typeToComponent = {
-			Meds: <MedicationInfo key={index} time={time} forceUpdate={forceUpdate} />,
+			Meds: <MedInfoWrapper key={index} time={time} />,
 			Logs: <LogInfoWrapper key={index} time={time} />,
 			Labs: <LabInfoWrapper key={index} time={time} />,
 			Workups: <WorkupInfoWrapper key={index} time={time} />,
