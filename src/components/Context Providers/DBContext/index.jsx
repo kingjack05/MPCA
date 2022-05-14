@@ -3,6 +3,12 @@ import { getDB } from "../../../db"
 import { useAuth0 } from "@auth0/auth0-react"
 const Context = createContext()
 
+const syncSharedConfig = {
+	url: "https://blessed-ghoul-34.hasura.app/v1/graphql",
+	deletedFlag: "deleted",
+	live: true,
+}
+
 export const DBContext = ({ children }) => {
 	const [DB, setDB] = useState()
 	const [JWT, setJWT] = useState("")
@@ -137,7 +143,6 @@ export const DBContext = ({ children }) => {
 					variables,
 				}
 			}
-
 			const templatesPullQueryBuilder = (doc) => {
 				if (!doc) {
 					doc = {
@@ -162,7 +167,6 @@ export const DBContext = ({ children }) => {
 					query,
 				}
 			}
-
 			const templatesPullModifier = (doc) => {
 				const { _id, problem, status, goal, data, updated_at, deleted } = doc
 				const { info } = data
@@ -176,7 +180,6 @@ export const DBContext = ({ children }) => {
 					deleted,
 				}
 			}
-
 			const templatesReplicationState = db.templates.syncGraphQL({
 				url: "https://blessed-ghoul-34.hasura.app/v1/graphql",
 				headers: {
@@ -194,7 +197,6 @@ export const DBContext = ({ children }) => {
 				deletedFlag: "deleted",
 				live: true,
 			})
-
 			templatesReplicationState.error$.subscribe((error) => {
 				console.log("Templates replication error!")
 				console.dir(error)
@@ -216,6 +218,7 @@ export const DBContext = ({ children }) => {
 					  strength
 					  usage
 					  form
+					  info
 					  updated_at
 					  deleted
 					}
@@ -224,20 +227,32 @@ export const DBContext = ({ children }) => {
 					query,
 				}
 			}
-
+			const medsPullModifier = (doc) => {
+				const { _id, name, strength, usage, form, info, updated_at, deleted } = doc
+				const { medClass, indications } = info
+				return {
+					_id,
+					name,
+					strength,
+					usage,
+					form,
+					medClass,
+					indications,
+					updated_at,
+					deleted,
+				}
+			}
 			const medsReplicationState = db.meds.syncGraphQL({
-				url: "https://blessed-ghoul-34.hasura.app/v1/graphql",
 				headers: {
 					Authorization: `Bearer ${JWT}`,
 				},
 				pull: {
 					queryBuilder: medsPullQueryBuilder,
 					batchSize: 5,
+					modifier: medsPullModifier,
 				},
-				deletedFlag: "deleted",
-				live: true,
+				...syncSharedConfig,
 			})
-
 			medsReplicationState.error$.subscribe((error) => {
 				console.log("Meds replication error!")
 				console.dir(error)

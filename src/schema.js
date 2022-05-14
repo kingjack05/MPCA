@@ -187,6 +187,9 @@ export const medsSchema = {
 		strength: { type: "string" },
 		usage: { type: "string" },
 		form: { type: "string" },
+		medClass: { type: "string" },
+		indications: { type: "array", items: { type: "string" } },
+		otherInfo: { type: "object" },
 		updated_at: {
 			type: "string",
 			format: "date-time",

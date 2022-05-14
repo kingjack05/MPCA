@@ -51,7 +51,11 @@ function CRUDTable({ schema }) {
 					...Object.keys(schema.properties)
 						.filter((property) => property !== "_id" && property !== "updated_at")
 						.map((property) => {
-							var columnObj = { Header: property, accessor: property }
+							var columnObj = {
+								Header: property,
+								accessor: property,
+								type: schema.properties[property].type,
+							}
 							return columnObj
 						}),
 				]}
@@ -64,22 +68,31 @@ function CRUDTable({ schema }) {
 	)
 }
 
-const EditableCell = ({ value: initialValue = "", row: { index }, column: { id }, data }) => {
+const EditableCell = ({ value: initialValue = "", row: { index }, column, data }) => {
 	// We need to keep and update the state of the cell normally
 	const [value, setValue] = useState(initialValue)
-
+	const { id, type } = column
 	const onChange = (e) => {
 		setValue(e.target.value)
 	}
 
 	// We'll only update the external data when the input is blurred
 	const onBlur = async () => {
-		await data[index].update({
-			$set: {
-				[id]: value,
-				updated_at: new Date().toISOString(),
-			},
-		})
+		if (type === "string") {
+			await data[index].update({
+				$set: {
+					[id]: value,
+					updated_at: new Date().toISOString(),
+				},
+			})
+		} else if (type === "object") {
+			await data[index].update({
+				$set: {
+					[id]: JSON.parse(value),
+					updated_at: new Date().toISOString(),
+				},
+			})
+		}
 	}
 
 	// If the initialValue is changed external, sync it up with our state
