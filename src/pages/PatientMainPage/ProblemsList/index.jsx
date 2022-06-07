@@ -8,6 +8,12 @@ import { ProblemForm } from "../../../components/UI/Forms/ProblemForm"
 import StatusIndicator from "../../../components/UI/StatusIndicator"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
 import { DeleteDialogue } from "../../../components/UI/Dialogues/DeleteDialogue"
+import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLongPressBox"
+import { LogInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LogInfoWrapper"
+import { LabInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LabInfoWrapper"
+import { WorkupInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/WorkupInfoWrapper"
+import { ImageInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/ImageInfoWrapper"
+import { MedInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/MedInfoWrapper"
 
 import {
 	Accordion,
@@ -20,13 +26,8 @@ import {
 	VStack,
 	useDisclosure,
 } from "@chakra-ui/react"
+import { DateTime } from "luxon"
 import { useState } from "react"
-import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLongPressBox"
-import { LogInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LogInfoWrapper"
-import { LabInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LabInfoWrapper"
-import { WorkupInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/WorkupInfoWrapper"
-import { ImageInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/ImageInfoWrapper"
-import { MedInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/MedInfoWrapper"
 
 function ProblemsList({ patient }) {
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
@@ -155,7 +156,9 @@ function Problem({ problemIndex, onEdit, onDelete, onLongPress, onOpenAddInfoDra
 	const { patient } = usePatientContext()
 	const problem = patient?.problems[problemIndex]
 	const sortedInfo = [...problem.info].sort(function (a, b) {
-		return a.content.time < b.content.time ? 1 : a.content.time > b.content.time ? -1 : 0
+		const luxonTimeA = DateTime.fromISO(a.content.time)
+		const luxonTimeB = DateTime.fromISO(b.content.time)
+		return luxonTimeA < luxonTimeB ? 1 : luxonTimeA > luxonTimeB ? -1 : 0
 	})
 
 	const InfoToComnponent = ({ category, content: { time } }, index) => {
