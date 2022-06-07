@@ -12,6 +12,7 @@ import {
 	Radio,
 	Text,
 } from "@chakra-ui/react"
+import { DateTime } from "luxon"
 import { useForm, Controller } from "react-hook-form"
 
 export const ProblemForm = ({ defaultValues, onSubmit, onCancel }) => {
@@ -31,7 +32,18 @@ export const ProblemForm = ({ defaultValues, onSubmit, onCancel }) => {
 						fieldName="problem"
 						otherInputProps={{ ...register("problem", { required: true }) }}
 						placeholder="Problem name (or import from database...)"
-						onSelect={({ status, goal, info }) => reset({ status, goal, info })}
+						onSelect={({ status, goal, info }) => {
+							const infoWithTimePrefilled = [...info].map(
+								({ category, content }, index) => {
+									const time = DateTime.now().plus({ seconds: -index }).toISO() // plus negative seconds*index so that the default order from sorting by time:descend is preserved
+									return {
+										category,
+										content: { ...content, time },
+									}
+								}
+							)
+							reset({ status, goal, info: infoWithTimePrefilled })
+						}}
 						limit={3}
 						mt="1"
 						mb="2"
