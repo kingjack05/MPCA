@@ -171,7 +171,11 @@ const AnnotationFieldController = ({ control, name }) => {
 					control={control}
 					name={name}
 					render={({ field: { value, onChange } }) => (
-						<TipTapEditor value={value} onChange={onChange} />
+						<TipTapEditor
+							value={value}
+							placeholder="Annotation..."
+							onChange={onChange}
+						/>
 					)}
 				/>
 			)}
