@@ -1,6 +1,7 @@
 .ProseMirror {
 	border-bottom: 1px solid #8d8d8d;
 	min-height: 72px;
+	padding: 0.5rem;
 }
 
 .ProseMirror p {
@@ -10,7 +11,7 @@
 }
 
 .ProseMirror > * + * {
-	margin-top: 0.75em;
+	margin-top: 0.5rem;
 }
 
 .ProseMirror .ProseMirror-selectednode {
@@ -28,4 +29,27 @@
 [contenteditable="false"] {
 	min-height: fit-content;
 	border-bottom: none;
+}
+
+ul[data-type="taskList"] {
+	list-style: none;
+	padding: 0;
+
+	p {
+		margin: 0;
+	}
+
+	li {
+		display: flex;
+
+		> label {
+			flex: 0 0 auto;
+			margin-right: 0.5rem;
+			user-select: none;
+		}
+
+		> div {
+			flex: 1 1 auto;
+		}
+	}
 }
