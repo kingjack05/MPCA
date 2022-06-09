@@ -22,6 +22,7 @@ export const ProblemForm = ({ defaultValues, onSubmit, onCancel }) => {
 		formState: { errors },
 		control,
 		reset,
+		getValues,
 	} = useForm({ defaultValues })
 	return (
 		<>
@@ -42,7 +43,11 @@ export const ProblemForm = ({ defaultValues, onSubmit, onCancel }) => {
 									}
 								}
 							)
-							reset({ status, goal, info: infoWithTimePrefilled })
+							reset({
+								status,
+								goal,
+								info: [...getValues("info"), ...infoWithTimePrefilled], //don't overwrite old data
+							})
 						}}
 						limit={3}
 						mt="1"
