@@ -18,11 +18,13 @@ export const WorkupConsumerForm = ({ defaultValues, onSubmit, onCancel }) => {
 		control, // control props comes from useForm
 		name: "questions",
 	})
-	console.dir(defaultValues)
 	return (
 		<>
 			<Box mx="3" mb="2">
 				<form id="WorkupConsumer" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+					{defaultValues.generalComments && (
+						<TipTapRenderer content={defaultValues.generalComments} />
+					)}
 					{fields.map((item, index) => {
 						if (item.category === "Yes/No") {
 							return (

@@ -86,12 +86,24 @@ export const WorkupForm = ({
 						mb="2"
 					/>
 					{errors.name && <Box color="error">Workup Name is required</Box>}
+					<Controller
+						control={control}
+						name="generalComments"
+						render={({ field: { value, onChange } }) => (
+							<TipTapEditor
+								value={value}
+								placeholder="Comments"
+								onChange={onChange}
+							/>
+						)}
+					/>
 					<Menu offset={[0, 0]} matchWidth autoSelect={false} variant="carbon">
 						<MenuButton
 							as={Button}
 							variant="primary"
 							borderRadius="none"
 							w="100%"
+							mt="2"
 							mb="2"
 							rightIcon={<ChevronDownIcon />}
 						>
