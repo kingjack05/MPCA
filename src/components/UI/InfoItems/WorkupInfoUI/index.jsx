@@ -1,9 +1,20 @@
 import { readableTimeString } from "../../../../misc/utils"
 
-import { Edit, LicenseDraft, TrashCan } from "@carbon/icons-react"
-import { Box, Flex, Show } from "@chakra-ui/react"
+import { Icon } from "@chakra-ui/icons"
+import { LicenseDraft, OverflowMenuHorizontal } from "@carbon/icons-react"
+import {
+	Box,
+	Flex,
+	IconButton,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuItem,
+	Portal,
+	Show,
+} from "@chakra-ui/react"
 
-export const WorkupInfoUI = ({ data }) => {
+export const WorkupInfoUI = ({ data, onEdit, onDelete, onExport }) => {
 	return data ? (
 		<Flex direction="column" bg="ui01" py="1">
 			<Box pl="3" textStyle="tertiaryText">
@@ -15,12 +26,21 @@ export const WorkupInfoUI = ({ data }) => {
 					{data.name}&nbsp;
 				</Box>
 				<Show above="sm">
-					<Box as="button" border="none" p="0">
-						<Edit size={16} />
-					</Box>
-					<Box as="button" border="none" p="0">
-						<TrashCan size={16} />
-					</Box>
+					<Menu offset={[0, 0]} matchWidth autoSelect={false} variant="carbon">
+						<MenuButton
+							as={IconButton}
+							icon={<Icon as={OverflowMenuHorizontal} />}
+							aria-label="Options"
+							borderRadius="none"
+						/>
+						<Portal>
+							<MenuList>
+								<MenuItem onClick={onEdit}>Edit</MenuItem>
+								<MenuItem onClick={onDelete}>Delete</MenuItem>
+								<MenuItem onClick={onExport}>Export Item</MenuItem>
+							</MenuList>
+						</Portal>
+					</Menu>
 				</Show>
 			</Flex>
 			<Box textStyle="label1" pl="3">

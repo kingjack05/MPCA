@@ -28,7 +28,9 @@ export const WorkupForm = ({
 		control,
 		register,
 		handleSubmit,
+		setValue,
 		formState: { errors },
+		getValues,
 	} = useForm({ defaultValues })
 	const { fields, append, remove } = useFieldArray({
 		control, // control props comes from useForm
@@ -79,24 +81,21 @@ export const WorkupForm = ({
 						collection="workups"
 						placeholder="Workup name (or import from database...)"
 						otherInputProps={{ ...register("name", { required: true }) }}
-						onSelect={({ questions }) =>
+						onSelect={({ generalComments, questions }) => {
 							questions.forEach((question) => append(question))
-						}
+							setValue("generalComments", generalComments)
+							console.log(getValues("generalComments"))
+						}}
 						limit={3}
 						mb="2"
 					/>
 					{errors.name && <Box color="error">Workup Name is required</Box>}
-					<Controller
+					<TipTapFieldController
 						control={control}
 						name="generalComments"
-						render={({ field: { value, onChange } }) => (
-							<TipTapEditor
-								value={value}
-								placeholder="Comments"
-								onChange={onChange}
-							/>
-						)}
+						text="Comments..."
 					/>
+
 					<Menu offset={[0, 0]} matchWidth autoSelect={false} variant="carbon">
 						<MenuButton
 							as={Button}
@@ -188,6 +187,30 @@ const AnnotationFieldController = ({ control, name }) => {
 							placeholder="Annotation..."
 							onChange={onChange}
 						/>
+					)}
+				/>
+			)}
+		</>
+	)
+}
+
+const TipTapFieldController = ({ control, name, text = "", placeholder = "" }) => {
+	const [annotateToggle, setAnnotateToggle] = useState(false)
+	return (
+		<>
+			<Box
+				onClick={() => {
+					setAnnotateToggle((prev) => !prev)
+				}}
+			>
+				{text}
+			</Box>
+			{annotateToggle && (
+				<Controller
+					control={control}
+					name={name}
+					render={({ field: { value, onChange } }) => (
+						<TipTapEditor value={value} placeholder={placeholder} onChange={onChange} />
 					)}
 				/>
 			)}

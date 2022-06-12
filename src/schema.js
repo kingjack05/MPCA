@@ -140,7 +140,7 @@ export const logSchema = {
  * @typedef Workup
  * @property {string} _id
  * @property {string} name Workup name
- * @property {string} generalComments Comments in Tiptap JSON format
+ * @property {{}} generalComments Comments in Tiptap JSON format
  * @property {Question[]} questions
  *
  * @typedef Question
@@ -160,7 +160,7 @@ export const workupSchema = {
 	properties: {
 		_id: { type: "string" },
 		name: { type: "string" },
-		generalComments: { type: "string" },
+		generalComments: { type: "object" },
 		questions: {
 			type: "array",
 			default: [],
@@ -169,6 +169,7 @@ export const workupSchema = {
 				properties: {
 					question: { type: "string" },
 					category: { type: "string" },
+					annotation: { type: "object" },
 				},
 			},
 		},

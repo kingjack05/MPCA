@@ -6,6 +6,7 @@ import { WorkupForm } from "../../../../../../components/UI/Forms/WorkupForm"
 import { WorkupConsumerForm } from "../../../../../../components/UI/Forms/WorkupConsumerForm"
 import { WorkupInfoUI } from "../../../../../../components/UI/InfoItems/WorkupInfoUI"
 import { DeleteDialogue } from "../../../../../../components/UI/Dialogues/DeleteDialogue"
+import { upsertWorkup } from "../../../../../../services/localRxDB/collection/workups"
 
 export const WorkupInfoWrapper = ({ time }) => {
 	const { patient } = usePatientContext()
@@ -17,30 +18,36 @@ export const WorkupInfoWrapper = ({ time }) => {
 	)
 	const data = patient.problems[problemIndex].info[infoIndex]?.content
 
+	const onEdit = () => {
+		onOpenDrawer()
+		setHeader("Edit Workup")
+		setComponent(
+			<UpdateWorkupFormWrapper
+				patient={patient}
+				problemIndex={problemIndex}
+				infoIndex={infoIndex}
+			/>
+		)
+	}
+	const onDelete = () => {
+		onOpenDrawer()
+		setHeader("Delete Workup")
+		setComponent(
+			<DeleteWorkupDialogueWrapper
+				patient={patient}
+				problemIndex={problemIndex}
+				infoIndex={infoIndex}
+			/>
+		)
+	}
+	const onExport = async () => {
+		await upsertWorkup(data)
+	}
+
 	return data ? (
 		<SwipeEditAndLongPressBox
-			onEdit={() => {
-				onOpenDrawer()
-				setHeader("Edit Workup")
-				setComponent(
-					<UpdateWorkupFormWrapper
-						patient={patient}
-						problemIndex={problemIndex}
-						infoIndex={infoIndex}
-					/>
-				)
-			}}
-			onDelete={() => {
-				onOpenDrawer()
-				setHeader("Delete Workup")
-				setComponent(
-					<DeleteWorkupDialogueWrapper
-						patient={patient}
-						problemIndex={problemIndex}
-						infoIndex={infoIndex}
-					/>
-				)
-			}}
+			onEdit={onEdit}
+			onDelete={onDelete}
 			onDoubleTap={() => {
 				onOpenDrawer()
 				setHeader("Workup")
@@ -53,7 +60,7 @@ export const WorkupInfoWrapper = ({ time }) => {
 				)
 			}}
 		>
-			<WorkupInfoUI data={data} />
+			<WorkupInfoUI data={data} onEdit={onEdit} onDelete={onDelete} onExport={onExport} />
 		</SwipeEditAndLongPressBox>
 	) : null
 }
