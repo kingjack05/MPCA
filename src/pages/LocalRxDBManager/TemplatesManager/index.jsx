@@ -9,7 +9,7 @@ import { SearchBar } from "../../../components/UI/SearchBar/SearchBar"
 import { useDrawer } from "../../../components/Context Providers/DrawerContext"
 import { DeleteDialogue } from "../../../components/UI/Dialogues/DeleteDialogue"
 
-export const TemplatesDB = () => {
+export const TemplatesManager = () => {
 	const setPageName = useUpdateAtom(pageNameAtom)
 	const { onOpenDrawer, setHeader, setComponent } = useDrawer()
 	const DBRef = useRef()

@@ -3,20 +3,21 @@ import { DBContext } from "./components/Context Providers/DBContext"
 import { DrawerContext } from "./components/Context Providers/DrawerContext"
 import theme from "./ds/theme"
 import "./index.css"
-import MedsDB from "./pages/DB/MedsDB"
+import { MainLayout } from "./layout/MainLayout"
+import { LabsManager } from "./pages/LocalRxDBManager/LabsManager"
+import { MedsManager } from "./pages/LocalRxDBManager/MedsManager"
+import { TemplatesManager } from "./pages/LocalRxDBManager/TemplatesManager"
+import { WorkupsManager } from "./pages/LocalRxDBManager/WorkupsManager"
 import PatientMainPage from "./pages/PatientMainPage"
 // import Test from "./pages/Test"
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration"
 
+import { Auth0Provider } from "@auth0/auth0-react"
 import { ChakraProvider } from "@chakra-ui/react"
+import { defineCustomElements } from "@ionic/pwa-elements/loader"
 import React from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { MainLayout } from "./layout/MainLayout"
-import { TemplatesDB } from "./pages/DB/TemplatesDB"
-import { Auth0Provider } from "@auth0/auth0-react"
-import { defineCustomElements } from "@ionic/pwa-elements/loader"
-import { LabsDB } from "./pages/DB/LabsDB"
 
 const container = document.getElementById("root")
 const root = createRoot(container)
@@ -35,10 +36,11 @@ root.render(
 							<Routes>
 								<Route element={<MainLayout />}>
 									<Route path="/" element={<App />} />
-									<Route path="db">
-										<Route path="labs" element={<LabsDB />} />
-										<Route path="templates" element={<TemplatesDB />} />
-										<Route path="meds" element={<MedsDB />} />
+									<Route path="dbManager">
+										<Route path="labs" element={<LabsManager />} />
+										<Route path="meds" element={<MedsManager />} />
+										<Route path="templates" element={<TemplatesManager />} />
+										<Route path="workups" element={<WorkupsManager />} />
 									</Route>
 								</Route>
 								<Route path="/patient/:_id" element={<PatientMainPage />} />

@@ -1,12 +1,12 @@
 import { pageNameAtom } from "../../../atoms"
 import CRUDTable from "../../../components/CRUDTable"
-import { medsSchema } from "../../../schema"
 
 import { useUpdateAtom } from "jotai/utils"
 import { useEffect } from "react"
 import { Box } from "@chakra-ui/react"
+import { labsSchema } from "../../../schema"
 
-const MedsDB = () => {
+export const LabsManager = () => {
 	const setPageName = useUpdateAtom(pageNameAtom)
 
 	useEffect(() => {
@@ -16,11 +16,9 @@ const MedsDB = () => {
 	return (
 		<>
 			<Box fontSize="20px" mt="2" mb="3" pl="2">
-				Meds
+				Labs
 			</Box>
-			<CRUDTable schema={medsSchema} />
+			<CRUDTable schema={labsSchema} />
 		</>
 	)
 }
-
-export default MedsDB
