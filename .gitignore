@@ -21,7 +21,7 @@ localArchive
 .vscode/*
 !.vscode/extensions.json
 .unotes
-.idea
+.idea*
 .DS_Store
 *.suo
 *.ntvs*
