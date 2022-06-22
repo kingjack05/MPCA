@@ -8,6 +8,7 @@ export const ImageForm = ({
 	defaultValues = { time: new Date().toISOString() },
 	onSubmit,
 	onCancel,
+	options = { withTime: true },
 }) => {
 	const {
 		register,
@@ -35,13 +36,15 @@ export const ImageForm = ({
 					<Flex alignItems="center" mb="1">
 						<Textarea {...register("summary")} placeholder="Summary" variant="carbon" />
 					</Flex>
-					<Controller
-						control={control}
-						name="time"
-						render={({ field: { value, onChange } }) => (
-							<TimeDateInput value={value} onChange={onChange} />
-						)}
-					/>
+					{options.withTime && (
+						<Controller
+							control={control}
+							name="time"
+							render={({ field: { value, onChange } }) => (
+								<TimeDateInput value={value} onChange={onChange} />
+							)}
+						/>
+					)}
 				</form>
 			</Box>
 			<Flex>

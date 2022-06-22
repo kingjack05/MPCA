@@ -8,6 +8,9 @@ export const LogForm = ({
 	defaultValues = { time: new Date().toISOString() },
 	onSubmit,
 	onCancel,
+	options = {
+		withTime: true,
+	},
 }) => {
 	const {
 		register,
@@ -33,13 +36,15 @@ export const LogForm = ({
 					/>
 					{errors.summary && <FormErrorMessage>Summary is required</FormErrorMessage>}
 					<Textarea {...register("detailed")} placeholder="Details" variant="carbon" />
-					<Controller
-						control={control}
-						name="time"
-						render={({ field: { value, onChange } }) => (
-							<TimeDateInput value={value} onChange={onChange} />
-						)}
-					/>
+					{options.withTime && (
+						<Controller
+							control={control}
+							name="time"
+							render={({ field: { value, onChange } }) => (
+								<TimeDateInput value={value} onChange={onChange} />
+							)}
+						/>
+					)}
 				</form>
 			</Box>
 			<Flex>

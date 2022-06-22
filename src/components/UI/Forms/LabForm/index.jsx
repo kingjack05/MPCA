@@ -9,6 +9,7 @@ export const LabForm = ({
 	defaultValues = { time: new Date().toISOString() },
 	onSubmit,
 	onCancel,
+	options = { withTime: true },
 }) => {
 	const {
 		register,
@@ -49,13 +50,15 @@ export const LabForm = ({
 						/>
 						<Exchange style={{ flexShrink: "0", width: "26px", height: "26px" }} />
 					</Flex>
-					<Controller
-						control={control}
-						name="time"
-						render={({ field: { value, onChange } }) => (
-							<TimeDateInput value={value} onChange={onChange} />
-						)}
-					/>
+					{options.withTime && (
+						<Controller
+							control={control}
+							name="time"
+							render={({ field: { value, onChange } }) => (
+								<TimeDateInput value={value} onChange={onChange} />
+							)}
+						/>
+					)}
 				</form>
 			</Box>
 			<Flex>

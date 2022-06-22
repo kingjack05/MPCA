@@ -107,42 +107,17 @@ export const ProblemDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 
 export const AddInfoDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 	const [infoType, setInfoType] = useState()
+	const formWrapperProps = {
+		patient,
+		problemIndex,
+		onClose,
+	}
 	const typeToComponent = {
-		Workup: (
-			<CreateWorkupFormWrapper
-				patient={patient}
-				problemIndex={problemIndex}
-				onClose={onClose}
-			/>
-		),
-		Logs: (
-			<CreateLogInfoFormWrapper
-				patient={patient}
-				problemIndex={problemIndex}
-				onClose={onClose}
-			/>
-		),
-		Meds: (
-			<CreateMedInfoFormWrapper
-				patient={patient}
-				problemIndex={problemIndex}
-				onClose={onClose}
-			/>
-		),
-		Labs: (
-			<CreateLabInfoFormWrapper
-				patient={patient}
-				problemIndex={problemIndex}
-				onClose={onClose}
-			/>
-		),
-		Images: (
-			<CreateImageFormWrapper
-				patient={patient}
-				problemIndex={problemIndex}
-				onClose={onClose}
-			/>
-		),
+		Workups: <CreateWorkupFormWrapper {...formWrapperProps} />,
+		Logs: <CreateLogInfoFormWrapper {...formWrapperProps} />,
+		Meds: <CreateMedInfoFormWrapper {...formWrapperProps} />,
+		Labs: <CreateLabInfoFormWrapper {...formWrapperProps} />,
+		Images: <CreateImageFormWrapper {...formWrapperProps} />,
 	}
 
 	return (
@@ -152,7 +127,7 @@ export const AddInfoDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 				<DrawerCloseButton />
 				<DrawerHeader pb="1">Add {infoType ? infoType : "Info"}</DrawerHeader>
 				<DrawerBody>
-					<InfoTypeRadioGroup infoType={infoType} setInfoType={setInfoType} />
+					<InfoTypeRadioGroup value={infoType} onChange={setInfoType} />
 					{typeToComponent[infoType]}
 				</DrawerBody>
 			</DrawerContent>
@@ -160,9 +135,9 @@ export const AddInfoDrawer = ({ isOpen, onClose, patient, problemIndex }) => {
 	)
 }
 
-const InfoTypeRadioGroup = ({ infoType, setInfoType }) => {
+export const InfoTypeRadioGroup = ({ value, onChange }) => {
 	const getIconButtonProps = (type) => {
-		const color = infoType === type ? "interactive01" : "text03"
+		const color = value === type ? "interactive01" : "text03"
 
 		return {
 			as: "button",
@@ -170,7 +145,7 @@ const InfoTypeRadioGroup = ({ infoType, setInfoType }) => {
 			border: "none",
 			bg: "transparent",
 			onClick: () => {
-				setInfoType(type)
+				onChange(type)
 			},
 			color,
 			"aria-label": type,
@@ -179,7 +154,7 @@ const InfoTypeRadioGroup = ({ infoType, setInfoType }) => {
 
 	return (
 		<Flex px="2" mb="1" justify="space-around">
-			<Box {...getIconButtonProps("Workup")}>
+			<Box {...getIconButtonProps("Workups")}>
 				<LicenseDraft size={32} />
 			</Box>
 			<Box {...getIconButtonProps("Logs")}>

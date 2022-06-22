@@ -10,6 +10,9 @@ export const MedForm = ({
 	defaultValues = { time: new Date().toISOString() },
 	onSubmit,
 	onCancel,
+	options = {
+		withTime: true,
+	},
 }) => {
 	const { register, handleSubmit, reset, control } = useForm({
 		defaultValues,
@@ -47,13 +50,15 @@ export const MedForm = ({
 					<Input {...register("strength")} placeholder="Strength" />
 					<Input {...register("form")} placeholder="Form" />
 					<Input {...register("usage")} placeholder="Usage" />
-					<Controller
-						control={control}
-						name="time"
-						render={({ field: { value, onChange } }) => (
-							<TimeDateInput value={value} onChange={onChange} />
-						)}
-					/>
+					{options.withTime && (
+						<Controller
+							control={control}
+							name="time"
+							render={({ field: { value, onChange } }) => (
+								<TimeDateInput value={value} onChange={onChange} />
+							)}
+						/>
+					)}
 				</form>
 			</Box>
 			<Flex>

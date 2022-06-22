@@ -8,6 +8,7 @@ import { ProblemForm } from "../../../components/UI/Forms/ProblemForm"
 import StatusIndicator from "../../../components/UI/StatusIndicator"
 import { AddInfoDrawer, ProblemDrawer } from "./drawers"
 import { DeleteDialogue } from "../../../components/UI/Dialogues/DeleteDialogue"
+import { CreateInfoButton } from "../../../components/UI/ProblemUI/ProblemUI"
 import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLongPressBox"
 import { LogInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LogInfoWrapper"
 import { LabInfoWrapper } from "./ProblemWrapper/InfoItemWrapper/LabInfoWrapper"
@@ -287,26 +288,6 @@ const DeleteProblemDialogueWrapper = ({ patient, problemIndex }) => {
 			onCancel={onCloseDrawer}
 		/>
 	) : null
-}
-
-function CreateInfoButton({ onClick }) {
-	return (
-		<Box
-			as="button"
-			onClick={onClick}
-			bg="transparent"
-			h="5"
-			border="dashed"
-			borderRadius="none"
-			mb="1"
-			w="100%"
-			color="text02"
-			fontStyle="italic"
-			_hover={{ color: "blue.600hover", shadow: "lg" }}
-		>
-			+ New Info
-		</Box>
-	)
 }
 
 export default ProblemsList
