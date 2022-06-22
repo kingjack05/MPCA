@@ -18,39 +18,48 @@ import { defineCustomElements } from "@ionic/pwa-elements/loader"
 import React from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { QueryClientProvider, QueryClient } from "react-query"
 
 const container = document.getElementById("root")
 const root = createRoot(container)
+
+const queryClient = new QueryClient()
+
 root.render(
 	<React.StrictMode>
-		<ChakraProvider theme={theme} resetCSS={false}>
-			<Auth0Provider
-				domain="dev-yu40ug8e.us.auth0.com"
-				clientId="Xh51UL907wUZik0qZLKL2a6xat7Qy6BF"
-				redirectUri={window.location.origin}
-				audience="kingjack05@gmail.com"
-			>
-				<DBContext>
-					<DrawerContext>
-						<BrowserRouter>
-							<Routes>
-								<Route element={<MainLayout />}>
-									<Route path="/" element={<App />} />
-									<Route path="dbManager">
-										<Route path="labs" element={<LabsManager />} />
-										<Route path="meds" element={<MedsManager />} />
-										<Route path="templates" element={<TemplatesManager />} />
-										<Route path="workups" element={<WorkupsManager />} />
+		<QueryClientProvider client={queryClient}>
+			<ChakraProvider theme={theme} resetCSS={false}>
+				<Auth0Provider
+					domain="dev-yu40ug8e.us.auth0.com"
+					clientId="Xh51UL907wUZik0qZLKL2a6xat7Qy6BF"
+					redirectUri={window.location.origin}
+					audience="kingjack05@gmail.com"
+				>
+					<DBContext>
+						<DrawerContext>
+							<BrowserRouter>
+								<Routes>
+									<Route element={<MainLayout />}>
+										<Route path="/" element={<App />} />
+										<Route path="dbManager">
+											<Route path="labs" element={<LabsManager />} />
+											<Route path="meds" element={<MedsManager />} />
+											<Route
+												path="templates"
+												element={<TemplatesManager />}
+											/>
+											<Route path="workups" element={<WorkupsManager />} />
+										</Route>
 									</Route>
-								</Route>
-								<Route path="/patient/:_id" element={<PatientMainPage />} />
-								{/* <Route path="/test" element={<Test />} /> */}
-							</Routes>
-						</BrowserRouter>
-					</DrawerContext>
-				</DBContext>
-			</Auth0Provider>
-		</ChakraProvider>
+									<Route path="/patient/:_id" element={<PatientMainPage />} />
+									{/* <Route path="/test" element={<Test />} /> */}
+								</Routes>
+							</BrowserRouter>
+						</DrawerContext>
+					</DBContext>
+				</Auth0Provider>
+			</ChakraProvider>
+		</QueryClientProvider>
 	</React.StrictMode>
 )
 

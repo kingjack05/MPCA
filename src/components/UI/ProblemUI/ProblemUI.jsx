@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/react"
 import { useLongPress } from "use-long-press"
 
-// onEditInfo and onDeleteInfo contain parameter "index"
 export default function ProblemUI({
 	data,
 	onLongPress,

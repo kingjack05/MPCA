@@ -23,6 +23,9 @@ export const WorkupForm = ({
 	defaultValues = { time: new Date().toISOString() },
 	onSubmit,
 	onCancel,
+	options = {
+		withTime: true,
+	},
 }) => {
 	const {
 		control,
@@ -136,13 +139,15 @@ export const WorkupForm = ({
 						</MenuList>
 					</Menu>
 					{fields.map(questionsForm)}
-					<Controller
-						control={control}
-						name="time"
-						render={({ field: { value, onChange } }) => (
-							<TimeDateInput value={value} onChange={onChange} />
-						)}
-					/>
+					{options.withTime && (
+						<Controller
+							control={control}
+							name="time"
+							render={({ field: { value, onChange } }) => (
+								<TimeDateInput value={value} onChange={onChange} />
+							)}
+						/>
+					)}
 				</form>
 			</Box>
 			<Flex>
