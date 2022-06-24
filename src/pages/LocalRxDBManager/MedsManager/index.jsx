@@ -1,6 +1,6 @@
 import { pageNameAtom } from "../../../atoms"
 import CRUDTable from "../../../components/CRUDTable"
-import { medsSchema } from "../../../schema"
+import { medsSchema } from "../../../schema.ts"
 
 import { useUpdateAtom } from "jotai/utils"
 import { useEffect } from "react"

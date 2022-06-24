@@ -1,4 +1,12 @@
-export const patientSchema = {
+import {
+	toTypedRxJsonSchema,
+	ExtractDocumentTypeFromTypedRxJsonSchema,
+	RxJsonSchema,
+	RxCollection,
+	RxDatabase,
+} from "rxdb"
+
+export const patientSchemaLiteral = {
 	title: "patients",
 	description: "patients data",
 	version: 0,
@@ -13,6 +21,18 @@ export const patientSchema = {
 		weight: { type: "string" },
 		summary: { type: "string" },
 		extraInfo: { type: "object" },
+		todos: {
+			type: "array",
+			default: [],
+			items: {
+				type: "object",
+				properties: {
+					title: { type: "string" },
+					done: { type: "boolean" },
+					annotation: { type: "object" },
+				},
+			},
+		},
 		problems: {
 			type: "array",
 			default: [],
@@ -88,8 +108,11 @@ export const patientSchema = {
 	},
 	required: ["name"],
 	indexes: ["name", "updated_at"],
-	additionalProperties: true,
-}
+} as const
+const patientTypedRxJsonSchema = toTypedRxJsonSchema(patientSchemaLiteral)
+type PatientDocType = ExtractDocumentTypeFromTypedRxJsonSchema<typeof patientTypedRxJsonSchema>
+export const patientSchema: RxJsonSchema<PatientDocType> = patientSchemaLiteral
+export type PatientCollection = RxCollection<PatientDocType>
 
 export const templateSchema = {
 	title: "templates",
@@ -151,7 +174,7 @@ export const logSchema = {
  * @typedef {"Text" | "Yes/No" | "Single Select" | "Multiple Select"} QuestionCategory
  */
 
-export const workupSchema = {
+export const workupSchemaLiteral = {
 	title: "workups",
 	description: "workup data",
 	version: 0,
@@ -178,9 +201,13 @@ export const workupSchema = {
 			format: "date-time",
 		},
 	},
-}
+} as const
+const workupTypedRxJsonSchema = toTypedRxJsonSchema(workupSchemaLiteral)
+type WorkupDocType = ExtractDocumentTypeFromTypedRxJsonSchema<typeof workupTypedRxJsonSchema>
+export const workupSchema: RxJsonSchema<WorkupDocType> = workupSchemaLiteral
+export type WorkupCollection = RxCollection<WorkupDocType>
 
-export const medsSchema = {
+export const medsSchemaLiteral = {
 	title: "meds",
 	description: "meds data",
 	version: 0,
@@ -200,7 +227,11 @@ export const medsSchema = {
 			format: "date-time",
 		},
 	},
-}
+} as const
+const medsTypedRxJsonSchema = toTypedRxJsonSchema(medsSchemaLiteral)
+type MedDocType = ExtractDocumentTypeFromTypedRxJsonSchema<typeof medsTypedRxJsonSchema>
+export const medsSchema: RxJsonSchema<MedDocType> = medsSchemaLiteral
+export type MedsCollection = RxCollection<MedDocType>
 
 export const labsSchema = {
 	title: "labs",
@@ -238,3 +269,11 @@ export const imagesSchema = {
 		},
 	},
 }
+
+export type DBCollections = {
+	patients: PatientCollection
+	workups: WorkupCollection
+	meds: MedsCollection
+}
+
+export type DB = RxDatabase<DBCollections>

@@ -9,16 +9,19 @@ import {
 	labsSchema,
 	logSchema,
 	imagesSchema,
-} from "./schema"
+	DBCollections,
+	DB,
+} from "./schema.ts"
 import { RxDBReplicationGraphQLPlugin } from "rxdb/plugins/replication-graphql"
 
 addRxPlugin(RxDBReplicationGraphQLPlugin)
 
-let dbPromise = null
+type DBPlaceholder = null | Promise<DB>
+let dbPromise: DBPlaceholder = null
 
 const _create = async () => {
 	// Create DB
-	const db = await createRxDatabase({
+	const db = await createRxDatabase<DBCollections>({
 		name: "mydatabase",
 		storage: getRxStorageLoki({
 			adapter: new idb(),

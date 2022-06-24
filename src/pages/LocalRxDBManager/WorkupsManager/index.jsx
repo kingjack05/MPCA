@@ -3,7 +3,7 @@ import { useDrawer } from "../../../components/Context Providers/DrawerContext"
 import { DeleteDialogue } from "../../../components/UI/Dialogues/DeleteDialogue"
 import { SearchBar } from "../../../components/UI/SearchBar/SearchBar"
 import { SwipeEditAndLongPressBox } from "../../../components/UI/SwipeEditAndLongPressBox"
-import { getDB } from "../../../db"
+import { getDB } from "../../../db.ts"
 
 import { useUpdateAtom } from "jotai/utils"
 import { useEffect, useState } from "react"

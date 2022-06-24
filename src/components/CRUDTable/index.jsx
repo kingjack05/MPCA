@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useGlobalFilter, usePagination, useTable } from "react-table"
 
-import { getDB } from "../../db"
+import { getDB } from "../../db.ts"
 import { v4 as uuid } from "uuid"
 import {
 	Input,

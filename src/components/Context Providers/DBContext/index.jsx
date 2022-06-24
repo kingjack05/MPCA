@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { getDB } from "../../../db"
+import { getDB } from "../../../db.ts"
 import { useAuth0 } from "@auth0/auth0-react"
 const Context = createContext()
 

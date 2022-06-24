@@ -6,7 +6,7 @@ import { WorkupForm } from "../../../../../../components/UI/Forms/WorkupForm"
 import { WorkupConsumerForm } from "../../../../../../components/UI/Forms/WorkupConsumerForm"
 import { WorkupInfoUI } from "../../../../../../components/UI/InfoItems/WorkupInfoUI"
 import { DeleteDialogue } from "../../../../../../components/UI/Dialogues/DeleteDialogue"
-import { upsertWorkup } from "../../../../../../services/localRxDB/collection/workups"
+import { upsertWorkup } from "../../../../../../services/localRxDB/collection/workups.ts"
 
 export const WorkupInfoWrapper = ({ time }) => {
 	const { patient } = usePatientContext()

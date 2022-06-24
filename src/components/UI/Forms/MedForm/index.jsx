@@ -4,7 +4,7 @@ import { Box, Button, Flex, Input } from "@chakra-ui/react"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { AutosuggestInput } from "../../InputWidgets/AutosuggestInput"
-import { medFuzzySearch } from "../../../../services/localRxDB/fuzzySearch"
+import { medFuzzySearch } from "../../../../services/localRxDB/fuzzySearch.ts"
 
 export const MedForm = ({
 	defaultValues = { time: new Date().toISOString() },

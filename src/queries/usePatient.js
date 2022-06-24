@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
-import { getDB } from "../db"
+import { getDB } from "../db.ts"
 
 export const usePatient = ({ id }) => {
 	const [patient, setPatient] = useState()

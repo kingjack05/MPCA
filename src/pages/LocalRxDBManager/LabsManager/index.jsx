@@ -4,7 +4,7 @@ import CRUDTable from "../../../components/CRUDTable"
 import { useUpdateAtom } from "jotai/utils"
 import { useEffect } from "react"
 import { Box } from "@chakra-ui/react"
-import { labsSchema } from "../../../schema"
+import { labsSchema } from "../../../schema.ts"
 
 export const LabsManager = () => {
 	const setPageName = useUpdateAtom(pageNameAtom)

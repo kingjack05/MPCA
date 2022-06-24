@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid"
-import { getDB } from "../../../db"
+import { getDB } from "../../../db.ts"
 
 export const upsertWorkup = async (data) => {
 	const DB = await getDB()
@@ -8,8 +8,7 @@ export const upsertWorkup = async (data) => {
 	if (!dataCopied._id) {
 		dataCopied._id = uuid()
 	}
-	const query = DB.workups.upsert(dataCopied)
-	const results = await query.exec()
+	const results = await DB.workups.upsert(dataCopied)
 	// console.log(results)
 	return results
 }

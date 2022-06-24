@@ -3,7 +3,7 @@ import { useDrawer } from "../../components/Context Providers/DrawerContext"
 
 import StatusIndicator from "../../components/UI/StatusIndicator"
 import SwipeEditBox from "../../components/SwipeEditBox"
-import { getDB } from "../../db"
+import { getDB } from "../../db.ts"
 
 import { Box, Flex, VStack } from "@chakra-ui/react"
 import { useEffect, useRef, useState } from "react"

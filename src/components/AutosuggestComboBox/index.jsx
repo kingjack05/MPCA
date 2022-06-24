@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useCombobox } from "downshift"
 import { useDebounce } from "../../hooks/utility/useDebounce"
-import { getDB } from "../../db"
+import { getDB } from "../../db.ts"
 import { Box, Flex, Input, UnorderedList } from "@chakra-ui/react"
 
 export const AutosuggestComboBox = ({

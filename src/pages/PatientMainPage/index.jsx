@@ -6,6 +6,7 @@ import ProblemsList from "./ProblemsList"
 import { useNavigate, useParams } from "react-router-dom"
 import { usePatient } from "../../queries/usePatient"
 import { useDocumentTitle } from "../../hooks/useDocumentTitle"
+import { TodosList } from "./TodosList"
 
 function PatientMainPage() {
 	const params = useParams()
@@ -25,6 +26,9 @@ function PatientMainPage() {
 						</TabList>
 
 						<TabPanels>
+							<TabPanel>
+								<TodosList patient={patient} />
+							</TabPanel>
 							<TabPanel>
 								<ProblemsList patient={patient} />
 							</TabPanel>
