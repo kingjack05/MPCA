@@ -19,6 +19,7 @@ function PatientMainPage() {
 					<Header patient={patient} />
 					<Tabs variant="line" flex="1" bg="background">
 						<TabList>
+							<Tab>ToDo</Tab>
 							<Tab>Problems</Tab>
 							<Tab>Logs</Tab>
 							<Tab>Meds</Tab>
@@ -27,7 +28,7 @@ function PatientMainPage() {
 
 						<TabPanels>
 							<TabPanel>
-								<TodosList patient={patient} />
+								<TodosList patient={patient} patientID={params._id} />
 							</TabPanel>
 							<TabPanel>
 								<ProblemsList patient={patient} />

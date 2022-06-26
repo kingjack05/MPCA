@@ -11,7 +11,7 @@ import {
 	imagesSchema,
 	DBCollections,
 	DB,
-} from "./schema.ts"
+} from "./schema"
 import { RxDBReplicationGraphQLPlugin } from "rxdb/plugins/replication-graphql"
 
 addRxPlugin(RxDBReplicationGraphQLPlugin)

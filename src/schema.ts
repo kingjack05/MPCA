@@ -4,6 +4,7 @@ import {
 	RxJsonSchema,
 	RxCollection,
 	RxDatabase,
+	RxDocument,
 } from "rxdb"
 
 export const patientSchemaLiteral = {
@@ -27,6 +28,7 @@ export const patientSchemaLiteral = {
 			items: {
 				type: "object",
 				properties: {
+					_id: { type: "string" },
 					title: { type: "string" },
 					done: { type: "boolean" },
 					annotation: { type: "object" },
@@ -110,7 +112,10 @@ export const patientSchemaLiteral = {
 	indexes: ["name", "updated_at"],
 } as const
 const patientTypedRxJsonSchema = toTypedRxJsonSchema(patientSchemaLiteral)
-type PatientDocType = ExtractDocumentTypeFromTypedRxJsonSchema<typeof patientTypedRxJsonSchema>
+export type PatientDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
+	typeof patientTypedRxJsonSchema
+>
+export type PatientRxDBDocType = RxDocument<PatientDocType>
 export const patientSchema: RxJsonSchema<PatientDocType> = patientSchemaLiteral
 export type PatientCollection = RxCollection<PatientDocType>
 

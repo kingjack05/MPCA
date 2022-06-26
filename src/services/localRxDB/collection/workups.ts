@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid"
-import { getDB } from "../../../db.ts"
+import { getDB } from "../../../db"
 
 export const upsertWorkup = async (data) => {
 	const DB = await getDB()

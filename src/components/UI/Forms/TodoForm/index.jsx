@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Input, Text } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 
-export const TodoForm = ({ defaultValues, onSubmit, onCancel }) => {
+export const TodoForm = ({ defaultValues = {}, onSubmit, onCancel }) => {
 	const {
 		register,
 		handleSubmit,

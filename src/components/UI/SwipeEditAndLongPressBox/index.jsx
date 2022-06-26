@@ -9,8 +9,8 @@ export const SwipeEditAndLongPressBox = ({
 	children,
 	onEdit,
 	onDelete,
-	onLongPress,
-	onDoubleTap,
+	onLongPress = (e) => {},
+	onDoubleTap = (e) => {},
 	...props
 }) => {
 	const { isSwiping, deltaX, bg, handlers } = useSwipeEdit({

@@ -1,4 +1,4 @@
-import { getDB } from "../../db.ts"
+import { getDB } from "../../db"
 
 export const medFuzzySearch = async (searchTerm) => {
 	const DB = await getDB()
