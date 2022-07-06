@@ -47,6 +47,14 @@ h6 {
 	isolation: isolate;
 }
 
+.chakra-tabs__tablist {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+	scrollbar-width: none; /* for Firefox */
+}
+.chakra-tabs__tablist::-webkit-scrollbar {
+	display: none; /* for Chrome, Safari, and Opera */
+}
+
 /* ibm-plex-sans-100 - latin */
 @font-face {
 	font-family: "IBM Plex Sans";

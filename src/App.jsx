@@ -4,6 +4,7 @@ import PatientList from "./pages/PatientList"
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react"
 import { useUpdateAtom } from "jotai/utils"
 import { useEffect } from "react"
+import { UserTodosOverview } from "./features/todo/pages/UserTodosOverview"
 
 function App() {
 	const setPageName = useUpdateAtom(pageNameAtom)
@@ -18,7 +19,6 @@ function App() {
 				<TabList>
 					<Tab>Patients</Tab>
 					<Tab>TODOs</Tab>
-					<Tab>Temp</Tab>
 				</TabList>
 
 				<TabPanels>
@@ -26,7 +26,7 @@ function App() {
 						<PatientList />
 					</TabPanel>
 					<TabPanel>
-						<p>Todos</p>
+						<UserTodosOverview />
 					</TabPanel>
 				</TabPanels>
 			</Tabs>

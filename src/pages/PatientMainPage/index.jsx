@@ -6,7 +6,7 @@ import ProblemsList from "./ProblemsList"
 import { useNavigate, useParams } from "react-router-dom"
 import { usePatient } from "../../queries/usePatient"
 import { useDocumentTitle } from "../../hooks/useDocumentTitle"
-import { TodosList } from "./TodosList"
+import { PatientTodosList } from "../../features/todo/pages/PatientTodosList"
 
 function PatientMainPage() {
 	const params = useParams()
@@ -17,8 +17,8 @@ function PatientMainPage() {
 			<PatientContext id={params._id}>
 				<Flex direction="column" h="100%">
 					<Header patient={patient} />
-					<Tabs variant="line" flex="1" bg="background">
-						<TabList>
+					<Tabs defaultIndex={1} variant="line" flex="1" bg="background">
+						<TabList overflowX="scroll">
 							<Tab>ToDo</Tab>
 							<Tab>Problems</Tab>
 							<Tab>Logs</Tab>
@@ -28,7 +28,7 @@ function PatientMainPage() {
 
 						<TabPanels>
 							<TabPanel>
-								<TodosList patient={patient} patientID={params._id} />
+								<PatientTodosList patient={patient} patientID={params._id} />
 							</TabPanel>
 							<TabPanel>
 								<ProblemsList patient={patient} />
