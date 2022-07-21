@@ -34,6 +34,9 @@ export const ProblemForm = ({ defaultValues, onSubmit, onCancel }) => {
 						otherInputProps={{ ...register("problem", { required: true }) }}
 						placeholder="Problem name (or import from database...)"
 						onSelect={({ status, goal, info }) => {
+							const originalInfoValues = getValues("info")
+								? [...getValues("info")]
+								: []
 							const infoWithTimePrefilled = [...info].map(
 								({ category, content }, index) => {
 									const time = DateTime.now().plus({ seconds: -index }).toISO() // plus negative seconds*index so that the default order from sorting by time:descend is preserved
@@ -46,7 +49,7 @@ export const ProblemForm = ({ defaultValues, onSubmit, onCancel }) => {
 							reset({
 								status,
 								goal,
-								info: [...getValues("info"), ...infoWithTimePrefilled], //don't overwrite old data
+								info: [...originalInfoValues, ...infoWithTimePrefilled], //don't overwrite old data
 							})
 						}}
 						limit={3}
